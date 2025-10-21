@@ -13,3 +13,4 @@ class ProductionConfig(Config):
 
 class TestingConfig(Config):
     TESTING = True
+
