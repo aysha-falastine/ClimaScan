@@ -9,12 +9,12 @@ export default function AboutPage() {
     <main className="min-h-screen bg-white flex flex-col items-center px-6 py-12">
       <NavBar />
 
-      <h1 className="text-3xl font-semibold text-gray-900 mt-10 mb-10 text-center">
+      <h1 className="text-3xl font-bold text-gray-900 mt-16 mb-12 text-center">
         ABOUT US!
       </h1>
 
 
-      <section className="grid md:grid-cols-3 gap-6 w-full max-w-5xl">
+      <section className="grid md:grid-cols-3 gap-6 w-full max-w-4xl">
 
 
         <div
@@ -57,7 +57,7 @@ export default function AboutPage() {
       </section>
 
 
-      <section className="mt-16 mb-32 text-center">
+      <section className="mt-20 mb-24 text-center">
         <h2 className="text-xl font-semibold text-gray-900 mb-8">DATASETS</h2>
         <div className="flex flex-col md:flex-row items-center justify-center gap-48">
           <div className="flex flex-col items-center">
