@@ -21,7 +21,7 @@ class Property(db.Model):
             "id": self.id,
             "name": self.name,
             "location": self.location,
-            "date": self.date_added.isoformat() if self.date_added else None,
+            "date_added": self.date_added.isoformat() if self.date_added else None,
             "created_at": self.created_at.isoformat() if self.created_at else None,
             "updated_at": self.updated_at.isoformat() if self.updated_at else None,
         }
