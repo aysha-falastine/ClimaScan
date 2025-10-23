@@ -13,17 +13,19 @@ export default function PropertiesPage() {
   const [form, setForm] = useState({ name: "", location: "", date_added: "" });
   const [loading, setLoading] = useState(false);
   const [editingId, setEditingId] = useState(null);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
 
-  useEffect(() => {
-    fetchProperties();
-  }, []);
-
-  const fetchProperties = async (query = "") => {
+  const fetchProperties = async (query = "", pageNum = 1) => {
     setLoading(true);
     try {
-      const res = await fetch(`${API_URL}?search=${query}`);
+      const res = await fetch(`${API_URL}?search=${query}&page=${pageNum}&per_page=5`);
       const data = await res.json();
       setProperties(data.properties || []);
+      setPage(data.page);
+      setTotalPages(data.pages);
+      setTotalCount(data.total);
     } catch (err) {
       console.error("Error fetching properties:", err);
     } finally {
@@ -31,12 +33,14 @@ export default function PropertiesPage() {
     }
   };
 
+  useEffect(() => {
+    fetchProperties(search, page);
+  }, [page]);
+
   const addOrUpdateProperty = async () => {
     if (!form.name || !form.location) return;
-
     const method = editingId ? "PUT" : "POST";
     const url = editingId ? `${API_URL}/${editingId}` : API_URL;
-
     try {
       const res = await fetch(url, {
         method,
@@ -47,14 +51,11 @@ export default function PropertiesPage() {
           date_added: form.date_added,
         }),
       });
-
       if (!res.ok) {
         const error = await res.json();
         throw new Error(error.error || "Failed to save property");
       }
-
       const updatedProp = await res.json();
-
       if (editingId) {
         setProperties((prev) =>
           prev.map((p) => (p.id === editingId ? updatedProp : p))
@@ -63,9 +64,7 @@ export default function PropertiesPage() {
       } else {
         setProperties((prev) => [...prev, updatedProp]);
       }
-
       fetchProperties();
-
       setForm({ name: "", location: "", date_added: "" });
     } catch (err) {
       console.error("Error saving property:", err);
@@ -94,7 +93,7 @@ export default function PropertiesPage() {
   const handleSearch = (e) => {
     const value = e.target.value;
     setSearch(value);
-    fetchProperties(value);
+    fetchProperties(value, 1);
   };
 
   return (
@@ -166,6 +165,37 @@ export default function PropertiesPage() {
           </table>
         </div>
 
+        <div className="flex flex-col items-center mt-6 gap-2">
+          <div className="flex justify-center items-center gap-4">
+            <button
+              disabled={page <= 1}
+              onClick={() => setPage(page - 1)}
+              className={`px-4 py-2 rounded-full border ${page <= 1
+                ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                : "bg-green-600 text-white hover:bg-green-700"
+                }`}
+            >
+              Previous
+            </button>
+            <span className="text-gray-700 text-sm">
+              Page {page} of {totalPages}
+            </span>
+            <button
+              disabled={page >= totalPages}
+              onClick={() => setPage(page + 1)}
+              className={`px-4 py-2 rounded-full border ${page >= totalPages
+                ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                : "bg-green-600 text-white hover:bg-green-700"
+                }`}
+            >
+              Next
+            </button>
+          </div>
+          <p className="text-gray-500 text-sm">
+            Showing {properties.length} of {totalCount} properties
+          </p>
+        </div>
+
         <div className="flex flex-col items-center mt-8 space-y-4">
           <div className="flex flex-wrap justify-center gap-6">
             <input
@@ -191,7 +221,6 @@ export default function PropertiesPage() {
               className="border border-gray-400 rounded-full px-5 py-2 bg-green-50 text-gray-800 focus:outline-none focus:border-green-500"
             />
           </div>
-
           <button
             onClick={addOrUpdateProperty}
             className="mt-3 bg-black text-white px-8 py-2 rounded-full hover:bg-gray-800 transition"
