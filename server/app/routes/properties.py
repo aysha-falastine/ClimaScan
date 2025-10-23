@@ -18,13 +18,14 @@ def create_property():
         return jsonify({"error": "Name and location are required"}), 400
 
     date_str = data.get("date_added")
-    date_added = None
 
     if date_str:
         try:
             date_added = datetime.strptime(date_str, "%Y-%m-%d").date()
         except ValueError:
             return jsonify({"error": "Invalid date format, use YYYY-MM-DD"}), 400
+    else:
+        date_added = datetime.now().date()
         
     new_property = Property(
         name=data["name"],
@@ -35,6 +36,9 @@ def create_property():
 
     db.session.add(new_property)
     db.session.commit()
+
+    db.session.refresh(new_property)
+    
     return jsonify(new_property.to_dict()), 201
 
 
