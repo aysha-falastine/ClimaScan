@@ -64,6 +64,8 @@ export default function PropertiesPage() {
         setProperties((prev) => [...prev, updatedProp]);
       }
 
+      fetchProperties();
+
       setForm({ name: "", location: "", date_added: "" });
     } catch (err) {
       console.error("Error saving property:", err);
