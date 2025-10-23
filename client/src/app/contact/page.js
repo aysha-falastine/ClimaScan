@@ -27,7 +27,7 @@ export default function ContactForm() {
       <NavBar />
 
 
-      <h1 className="text-4xl font-bold text-gray-900 text-center mt-24 mb-10">
+      <h1 className="text-4xl font-bold text-[#150B0B] text-center mt-24 mb-10">
         Contact Us
       </h1>
 

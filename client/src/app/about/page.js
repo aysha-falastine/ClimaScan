@@ -9,7 +9,7 @@ export default function AboutPage() {
     <main className="min-h-screen bg-white flex flex-col items-center px-6 py-12">
       <NavBar />
 
-      <h1 className="text-3xl font-bold text-gray-900 mt-16 mb-12 text-center">
+      <h1 className="text-3xl font-bold text-[#150B0B] mt-16 mb-12 text-center">
         ABOUT US!
       </h1>
 
