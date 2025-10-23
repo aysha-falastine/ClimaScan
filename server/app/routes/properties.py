@@ -67,7 +67,6 @@ def get_property(id):
     return jsonify(prop.to_dict())
 
 
-
 @properties_bp.route("/<int:id>", methods=["PUT"])
 def update_property(id):
     prop = Property.query.get_or_404(id)
@@ -76,8 +75,17 @@ def update_property(id):
     prop.name = data.get("name", prop.name)
     prop.location = data.get("location", prop.location)
 
+    
+    date_str = data.get("date_added")
+    if date_str:
+        try:
+            prop.date_added = datetime.strptime(date_str, "%Y-%m-%d").date()
+        except ValueError:
+            return jsonify({"error": "Invalid date format, use YYYY-MM-DD"}), 400
+
     db.session.commit()
-    return jsonify(prop.to_dict())
+    return jsonify(prop.to_dict()), 200
+
 
 
 
