@@ -42,7 +42,7 @@ const LoginPage = () => {
       </div>
 
       {/* ✅ Centered Glass Container */}
-      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-white/10 backdrop-blur-md rounded-xl shadow-lg flex overflow-hidden text-black">
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-white/10 backdrop-blur-md rounded-xl shadow-lg flex overflow-hidden text-black">
         {/* Left: Sign-in Form */}
         <div className="w-1/2 p-8 flex flex-col justify-center gap-4">
           <h2 className="text-xl font-semibold font-poppins text-black">
@@ -85,22 +85,18 @@ const LoginPage = () => {
         </div>
 
         {/* Right: Welcome Message */}
-<div className="w-1/2 px-10 py-8 flex flex-col justify-center items-end text-right font-jost relative -top-4 -left-2">
+<div className="w-1/2 px-8 py-8 flex flex-col justify-center items-start text-left font-jost relative -top-4 -left-4">
   <h3
     className="text-3xl font-semibold text-black leading-snug"
-    style={{
-      textShadow: '0px 1px 2px #29572C',
-    }}
+    style={{ textShadow: '0px 1px 2px #29572C' }}
   >
     Welcome Back!
   </h3>
-  <p
-    className="text-base text-black mt-3 max-w-[280px] leading-relaxed"
-  >
-    Together, let’s make smarter climate decisions. Log in to continue.
+  <p className="text-base text-black mt-3 leading-relaxed max-w-[260px]">
+    Together, let’s make smarter climate choices.<br />
+    Log in to continue.
   </p>
 </div>
-
 
       </div>
     </div>
