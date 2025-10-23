@@ -12,12 +12,8 @@ def create_app(config_class=DevelopmentConfig):
     Migrate(app, db)
     JWTManager(app)
 
-    # Register blueprints
-    from .routes import auth, users, properties, reports, dashboard
-    app.register_blueprint(auth.bp)
-    app.register_blueprint(users.bp)
-    app.register_blueprint(properties.bp)
-    app.register_blueprint(reports.bp)
-    app.register_blueprint(dashboard.bp)
+    
+    from app.routes import register_blueprints
+    register_blueprints(app)
 
     return app
