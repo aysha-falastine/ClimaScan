@@ -39,7 +39,7 @@ export default function DashboardPage() {
         <h2 className="text-xl font-semibold mb-2">
           Welcome, {user?.username || "User"} 🌤
         </h2>
-        <p className="text-gray-500 mb-6">
+        <p className="text-black mb-6">
           Your dashboard is empty — start by adding your first property to get climate insights!
         </p>
         <button className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition">
@@ -51,9 +51,9 @@ export default function DashboardPage() {
             (label, i) => (
               <div
                 key={i}
-                className="p-4 bg-white shadow rounded-lg text-center border border-gray-100"
+                className="p-4 bg-white shadow rounded-lg text-center border border-gray-500"
               >
-                <p className="text-sm text-gray-500">{label}</p>
+                <p className="text-sm text-black">{label}</p>
                 <p className="text-xl font-bold text-gray-400">—</p>
               </div>
             )
