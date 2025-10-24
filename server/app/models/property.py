@@ -1,5 +1,10 @@
 from datetime import datetime
-from app import db
+from app.database.db import db
+
+
+print("DEBUG — db object is:", db)
+print("DEBUG — db has attribute Model:", hasattr(db, "Model"))
+
 
 
 class Property(db.Model):
