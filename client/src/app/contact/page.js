@@ -45,7 +45,7 @@ export default function ContactForm() {
                 value={formData.name}
                 onChange={(e) => handleChange("name", e.target.value)}
                 placeholder="Your Name"
-                className="flex-1 px-6 py-3 rounded-full bg-white border-b-4 border-gray-300 focus:border-green-500 focus:outline-none transition-colors placeholder-gray-500 text-center shadow-[0_4px_6px_-1px_rgba(0,0,0,0.08)]"
+                className="flex-1 px-6 py-3 rounded-full bg-white border-b-4 border-gray-300 focus:border-green-500 focus:outline-none transition-colors placeholder-gray-500 text-gray-800 text-center shadow-[0_4px_6px_-1px_rgba(0,0,0,0.08)]"
               />
             </div>
 
@@ -59,7 +59,7 @@ export default function ContactForm() {
                 value={formData.email}
                 onChange={(e) => handleChange("email", e.target.value)}
                 placeholder="Your Email"
-                className="flex-1 px-6 py-3 rounded-full bg-white border-b-4 border-gray-300 focus:border-green-500 focus:outline-none transition-colors placeholder-gray-500 text-center shadow-[0_4px_6px_-1px_rgba(0,0,0,0.08)]"
+                className="flex-1 px-6 py-3 rounded-full bg-white border-b-4 border-gray-300 focus:border-green-500 focus:outline-none transition-colors placeholder-gray-500 text-gray-800 text-center shadow-[0_4px_6px_-1px_rgba(0,0,0,0.08)]"
               />
             </div>
 
@@ -73,7 +73,7 @@ export default function ContactForm() {
                 onChange={(e) => handleChange("message", e.target.value)}
                 placeholder="Write your Message"
                 rows="4"
-                className="flex-1 px-6 py-3 rounded-3xl bg-white border-b-4 border-gray-300 focus:border-green-500 focus:outline-none transition-colors placeholder-gray-500 text-center shadow-[0_4px_6px_-1px_rgba(0,0,0,0.08)] resize-none"
+                className="flex-1 px-6 py-3 rounded-3xl bg-white border-b-4 border-gray-300 focus:border-green-500 focus:outline-none transition-colors placeholder-gray-500 text-gray-800 text-center shadow-[0_4px_6px_-1px_rgba(0,0,0,0.08)] resize-none"
               />
             </div>
 
