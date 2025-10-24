@@ -22,6 +22,7 @@ export default function PropertiesPage() {
     try {
       const res = await fetch(`${API_URL}?search=${query}&page=${pageNum}&per_page=5`);
       const data = await res.json();
+      console.log("Fetched properties:", data);
       setProperties(data.properties || []);
       setPage(data.page);
       setTotalPages(data.pages);
@@ -34,8 +35,9 @@ export default function PropertiesPage() {
   };
 
   useEffect(() => {
+    console.log("Fetching from:", `${API_URL}?search=${search}&page=${page}&per_page=5`);
     fetchProperties(search, page);
-  }, [page]);
+  }, [search, page]);
 
   const addOrUpdateProperty = async () => {
     if (!form.name || !form.location) return;
@@ -93,7 +95,7 @@ export default function PropertiesPage() {
   const handleSearch = (e) => {
     const value = e.target.value;
     setSearch(value);
-    fetchProperties(value, 1);
+    setPage(1);
   };
 
   return (
@@ -218,7 +220,7 @@ export default function PropertiesPage() {
               onChange={(e) =>
                 setForm({ ...form, date_added: e.target.value })
               }
-              className="border border-gray-400 rounded-full px-5 py-2 bg-green-50 text-gray-800 focus:outline-none focus:border-green-500"
+              className="border border-gray-400 rounded-full px-5 py-2 bg-green-50 text-gray-800 placeholder-gray-500 focus:outline-none focus:border-green-500"
             />
           </div>
           <button
