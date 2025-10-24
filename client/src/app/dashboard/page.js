@@ -9,7 +9,7 @@ export default function DashboardPage() {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    // Fake user data (simulate login)
+
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       setUser(JSON.parse(storedUser));
@@ -17,7 +17,7 @@ export default function DashboardPage() {
       setUser({ username: "Asha" });
     }
 
-    // Fake dashboard data for development
+
     const fakeData = {
       total_properties: 12,
       reports_generated: 8,
@@ -48,7 +48,7 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-800 p-6">
-      {/* Header */}
+
       <header className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-semibold">
           Hi, {user.username} 👋
@@ -56,7 +56,7 @@ export default function DashboardPage() {
 
       </header>
 
-      {/* Welcome and Summary */}
+
       <div className="flex flex-col items-center justify-center text-center">
         <img
           src="/visual.svg"
@@ -76,7 +76,7 @@ export default function DashboardPage() {
           Add Property
         </button>
 
-        {/* Stats */}
+
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-10 w-full max-w-3xl">
           <div className="p-4 bg-white shadow rounded-lg text-center border border-gray-200">
             <p className="text-sm text-gray-600">Total Properties</p>
@@ -97,7 +97,7 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Charts Section */}
+
       <div className="mt-16 grid md:grid-cols-2 gap-8 w-full max-w-5xl mx-auto">
         {/* Properties Chart */}
         <div className="bg-white p-6 shadow rounded-lg border border-gray-200">
@@ -113,7 +113,7 @@ export default function DashboardPage() {
           </ResponsiveContainer>
         </div>
 
-        {/* Reports Chart */}
+
         <div className="bg-white p-6 shadow rounded-lg border border-gray-200">
           <h3 className="text-lg font-semibold mb-4 text-gray-800">Reports Generated per Month</h3>
           <ResponsiveContainer width="100%" height={300}>
