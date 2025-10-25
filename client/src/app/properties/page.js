@@ -5,7 +5,7 @@ import { FiTrash2, FiEdit2 } from "react-icons/fi";
 import dynamic from "next/dynamic";
 
 const Map = dynamic(() => import("@/components/Map"), { ssr: false });
-const API_URL = "http://127.0.0.1:5000/api/properties";
+const API_URL = "http://localhost:5000/api/properties";
 
 export default function PropertiesPage() {
   const [properties, setProperties] = useState([]);
@@ -64,9 +64,9 @@ export default function PropertiesPage() {
         );
         setEditingId(null);
       } else {
-        setProperties((prev) => [...prev, updatedProp]);
+        setProperties((prev) => [updatedProp, ...prev]);
       }
-      fetchProperties();
+      await fetchProperties(search, page);
       setForm({ name: "", location: "", date_added: "" });
     } catch (err) {
       console.error("Error saving property:", err);
