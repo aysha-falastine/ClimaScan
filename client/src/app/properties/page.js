@@ -5,7 +5,7 @@ import { FiTrash2, FiEdit2 } from "react-icons/fi";
 import dynamic from "next/dynamic";
 
 const Map = dynamic(() => import("@/components/Map"), { ssr: false });
-const API_URL = "http://localhost:5000/api/properties";
+const API_URL = "http://127.0.0.1:5000/api/properties";
 
 export default function PropertiesPage() {
   const [properties, setProperties] = useState([]);
@@ -39,7 +39,7 @@ export default function PropertiesPage() {
     fetchProperties(search, page);
   }, [search, page]);
 
-  const addOrUpdateProperty = async () => {
+  const addOrUpdateProperty = async (e) => {
     if (!form.name || !form.location) return;
     const method = editingId ? "PUT" : "POST";
     const url = editingId ? `${API_URL}/${editingId}` : API_URL;
