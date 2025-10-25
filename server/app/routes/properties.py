@@ -3,7 +3,7 @@ from app.models.property import Property
 from app import db
 from datetime import datetime
 
-properties_bp = Blueprint("properties", __name__)
+properties_bp = Blueprint("properties_bp", __name__)
 
 
 @properties_bp.route("/test", methods=["GET"])
@@ -11,7 +11,7 @@ def test_properties():
     return jsonify({"message": "Properties route working!"})
 
 
-@properties_bp.route("", methods=["POST"])
+@properties_bp.route("/", methods=["POST"])
 def create_property():
     data = request.get_json()
     if not data or not data.get("name") or not data.get("location"):
@@ -43,7 +43,7 @@ def create_property():
 
 
 
-@properties_bp.route("", methods=["GET"])
+@properties_bp.route("/", methods=["GET"])
 def get_properties():
     search = request.args.get("search", "", type=str)
     page = request.args.get("page", 1, type=int)
