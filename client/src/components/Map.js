@@ -1,0 +1,35 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { MapContainer, TileLayer } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+
+export default function Map() {
+
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+
+    return <div className="h-full w-full bg-gray-100 flex items-center justify-center text-gray-500">Loading map...</div>;
+  }
+
+  return (
+    <div className="h-full w-full">
+      <MapContainer
+        center={[-1.286389, 36.817223]}
+        zoom={12}
+        scrollWheelZoom={false}
+        className="h-full w-full"
+      >
+        <TileLayer
+          attribution='&copy; <a href="https://osm.org/copyright">OpenStreetMap</a>'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+      </MapContainer>
+    </div>
+  );
+}
