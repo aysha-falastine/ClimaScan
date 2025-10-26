@@ -2,8 +2,93 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { LayoutDashboard, Home, FileText, MessageSquare, LogOut, User, Send, Download, MapPin, CheckCircle, AlertCircle } from 'lucide-react';
-import { aiChatAPI, reportAPI, propertyAPI } from '@/lib/api';
-import { generateChatReport } from '@/utils/reportGenerator';
+
+// API Configuration
+const API_BASE_URL = 'http://127.0.0.1:5000/api';
+
+// API Service Functions
+const aiChatAPI = {
+  sendMessage: async (message, history) => {
+    const response = await fetch(`${API_BASE_URL}/ai/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message, history })
+    });
+    
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to send message');
+    }
+    
+    const data = await response.json();
+    return data.data || data;
+  }
+};
+
+const reportAPI = {
+  generateReport: async (propertyId) => {
+    console.log('🔍 Calling API:', `${API_BASE_URL}/reports/generate`);
+    console.log('🔍 Property ID:', propertyId);
+    
+    const response = await fetch(`${API_BASE_URL}/reports/generate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ property_id: propertyId })
+    });
+    
+    console.log('🔍 Response status:', response.status);
+    
+    if (!response.ok) {
+      const error = await response.json();
+      console.error('❌ API Error:', error);
+      throw new Error(error.error || 'Failed to generate report');
+    }
+    
+    const data = await response.json();
+    console.log('✅ API Response:', data);
+    return data;
+  }
+};
+
+const propertyAPI = {
+  getAllProperties: async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/properties`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch properties');
+      }
+      
+      const data = await response.json();
+      return data.data || data;
+    } catch (error) {
+      console.error('Property fetch error:', error);
+      // Return mock data if API fails
+      return [
+        { id: 1, name: 'Kilimani Heights, Nairobi', address: 'Kilimani, Nairobi' },
+        { id: 2, name: 'Westlands Tower', address: 'Westlands, Nairobi' }
+      ];
+    }
+  }
+};
+
+// Utility function for chat export
+const generateChatReport = (messages) => {
+  const chatContent = messages.map(msg => 
+    `${msg.isUser ? 'You' : 'ClimaScan AI'} (${new Date(msg.timestamp).toLocaleString()}):\n${msg.text}\n`
+  ).join('\n---\n\n');
+  
+  const blob = new Blob([chatContent], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `climascan-chat-${Date.now()}.txt`;
+  a.click();
+  URL.revokeObjectURL(url);
+};
 
 // ChatMessage Component
 const ChatMessage = ({ message, onViewReport, selectedProperty }) => {
@@ -193,272 +278,4 @@ export default function AIChatPage() {
   const messagesEndRef = useRef(null);
   const chatContainerRef = useRef(null);
 
-  useEffect(() => {
-    fetchProperties();
-  }, []);
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-
-  const fetchProperties = async () => {
-    try {
-      const data = await propertyAPI.getAllProperties();
-      setProperties(data);
-    } catch (err) {
-      console.error('Failed to fetch properties:', err);
-      setProperties([
-        { id: 1, name: 'Kilimani Heights, Nairobi', address: 'Kilimani, Nairobi' },
-        { id: 2, name: 'Westlands Tower', address: 'Westlands, Nairobi' }
-      ]);
-    }
-  };
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  const handleSendMessage = async () => {
-    if (!inputMessage.trim() || isLoading) return;
-
-    const userMessage = {
-      id: Date.now(),
-      text: inputMessage,
-      isUser: true,
-      timestamp: new Date()
-    };
-
-    setMessages(prev => [...prev, userMessage]);
-    setInputMessage('');
-    setIsLoading(true);
-
-    try {
-      const conversationHistory = messages.map(msg => ({
-        role: msg.isUser ? 'user' : 'assistant',
-        content: msg.text
-      }));
-
-      const response = await aiChatAPI.sendMessage(inputMessage, conversationHistory);
-      
-      const aiMessage = {
-        id: Date.now() + 1,
-        text: response.message || response.response || "I'm here to help with climate risk analysis. Could you provide more details?",
-        isUser: false,
-        timestamp: new Date(),
-        propertyData: response.propertyData,
-        reportGenerated: response.reportGenerated
-      };
-
-      setMessages(prev => [...prev, aiMessage]);
-    } catch (err) {
-      console.error('AI chat error:', err);
-      const errorMessage = {
-        id: Date.now() + 1,
-        text: "I apologize, I'm having trouble processing that request. Please try again or rephrase your question.",
-        isUser: false,
-        timestamp: new Date(),
-        isError: true
-      };
-      setMessages(prev => [...prev, errorMessage]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSendMessage();
-    }
-  };
-
-  const handleGenerateReport = async () => {
-    if (!selectedProperty) {
-      alert('Please select a property first');
-      return;
-    }
-
-    setIsLoading(true);
-    const reportRequestMsg = {
-      id: Date.now(),
-      text: `Generate a detailed climate risk report for ${selectedProperty.name}`,
-      isUser: true,
-      timestamp: new Date()
-    };
-    setMessages(prev => [...prev, reportRequestMsg]);
-
-    try {
-      const reportData = await reportAPI.generateReport(selectedProperty.id);
-      
-      const reportMessage = {
-        id: Date.now() + 1,
-        text: `✅ Climate Risk Report Generated!\n\nProperty: ${selectedProperty.name}\nOverall Risk Score: ${reportData.overall_score}%\n\n${reportData.ai_summary}\n\nThe report has been saved and is available in your Reports section.`,
-        isUser: false,
-        timestamp: new Date(),
-        reportData: reportData,
-        hasReport: true
-      };
-
-      setMessages(prev => [...prev, reportMessage]);
-      
-      setTimeout(() => {
-        if (confirm('Report generated successfully! Would you like to view it now?')) {
-          window.location.href = `/reports?propertyId=${selectedProperty.id}`;
-        }
-      }, 1000);
-    } catch (err) {
-      console.error('Report generation error:', err);
-      const errorMsg = {
-        id: Date.now() + 1,
-        text: "Failed to generate report. Please try again.",
-        isUser: false,
-        timestamp: new Date(),
-        isError: true
-      };
-      setMessages(prev => [...prev, errorMsg]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleExportChat = () => {
-    if (messages.length === 0) {
-      alert('No conversation to export');
-      return;
-    }
-
-    try {
-      generateChatReport(messages);
-    } catch (err) {
-      console.error('Export failed:', err);
-      alert('Failed to export chat. Please try again.');
-    }
-  };
-
-  return (
-    <div className="flex h-screen bg-white">
-      <Sidebar />
-      
-      <div className="flex-1 ml-28">
-        <header className="bg-white border-b border-gray-200 px-8 py-4 flex items-center justify-between">
-          <div>
-            <h2 className="text-3xl font-bold text-[#2D5F3F]">AI Climate Assistant</h2>
-            <p className="text-sm text-gray-600 mt-1">Ask questions, analyze properties, and generate reports</p>
-          </div>
-          
-          <div className="flex items-center gap-6">
-            <a href="/about" className="text-sm font-medium text-gray-600 hover:text-[#2D5F3F]">ABOUT</a>
-            <a href="/contact" className="text-sm font-medium text-gray-600 hover:text-[#2D5F3F]">CONTACT</a>
-            <a href="/profile-settings" className="w-12 h-12 rounded-full bg-gradient-to-br from-[#5DABBC] to-[#2D5F3F] flex items-center justify-center text-white font-semibold hover:shadow-lg transition-shadow cursor-pointer">
-              <User className="w-6 h-6" />
-            </a>
-          </div>
-        </header>
-
-        <main className="flex h-[calc(100vh-80px)]">
-          <div className="w-80 border-r border-gray-200 bg-gray-50 p-6 overflow-y-auto">
-            <h3 className="text-lg font-bold text-gray-800 mb-4">Select Property</h3>
-            
-            <div className="space-y-3">
-              {properties.map(property => (
-                <div
-                  key={property.id}
-                  onClick={() => setSelectedProperty(property)}
-                  className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-                    selectedProperty?.id === property.id
-                      ? 'border-[#2D5F3F] bg-white shadow-sm'
-                      : 'border-gray-200 bg-white hover:border-gray-300'
-                  }`}
-                >
-                  <h4 className="font-semibold text-gray-900 text-sm">{property.name}</h4>
-                  <p className="text-xs text-gray-600 mt-1">{property.address}</p>
-                </div>
-              ))}
-            </div>
-
-            {selectedProperty && (
-              <div className="mt-6 space-y-3">
-                <button
-                  onClick={handleGenerateReport}
-                  disabled={isLoading}
-                  className="w-full bg-[#2D5F3F] text-white px-4 py-3 rounded-lg font-medium hover:bg-[#234a32] transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                >
-                  <FileText className="w-4 h-4" />
-                  {isLoading ? 'Generating...' : 'Generate Report'}
-                </button>
-
-                <button
-                  onClick={handleExportChat}
-                  className="w-full bg-gray-700 text-white px-4 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors flex items-center justify-center gap-2"
-                >
-                  <Download className="w-4 h-4" />
-                  Export Chat
-                </button>
-              </div>
-            )}
-
-            <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-              <p className="text-xs text-gray-700 leading-relaxed">
-                💡 <strong>Tip:</strong> Select a property and ask specific questions like "What's the flood risk?" or click "Generate Report" for a full analysis.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex-1 flex flex-col">
-            <div ref={chatContainerRef} className="flex-1 overflow-y-auto p-6 space-y-4">
-              {messages.length === 0 && <WelcomeMessage />}
-              
-              {!selectedProperty && messages.length > 0 && (
-                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-center">
-                  <p className="text-sm text-yellow-800">
-                    ⚠️ Please select a property to get personalized climate risk analysis
-                  </p>
-                </div>
-              )}
-              
-              {messages.map(message => (
-                <ChatMessage 
-                  key={message.id}
-                  message={message}
-                  selectedProperty={selectedProperty}
-                  onViewReport={(propertyId) => {
-                    window.location.href = `/reports?propertyId=${propertyId}`;
-                  }}
-                />
-              ))}
-
-              {isLoading && <LoadingMessage />}
-              <div ref={messagesEndRef} />
-            </div>
-
-            <div className="border-t border-gray-200 p-6">
-              <div className="flex gap-3">
-                <input
-                  type="text"
-                  value={inputMessage}
-                  onChange={(e) => setInputMessage(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                  placeholder={selectedProperty ? `Ask about ${selectedProperty.name}...` : "Select a property to start chatting..."}
-                  disabled={isLoading || !selectedProperty}
-                  className="flex-1 bg-white border border-gray-300 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-[#5DABBC] focus:border-[#5DABBC] outline-none disabled:bg-gray-100 disabled:cursor-not-allowed"
-                />
-                <button
-                  onClick={handleSendMessage}
-                  disabled={isLoading || !inputMessage.trim() || !selectedProperty}
-                  className="bg-[#2D5F3F] text-white px-6 py-3 rounded-lg font-medium hover:bg-[#234a32] transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center gap-2"
-                >
-                  <Send className="w-4 h-4" />
-                  Send
-                </button>
-              </div>
-
-              <p className="text-xs text-gray-500 mt-2">
-                Press Enter to send • Shift+Enter for new line
-              </p>
-            </div>
-          </div>
-        </main>
-      </div>
-    </div>
-  );
-}
+  

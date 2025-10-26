@@ -1,11 +1,11 @@
 from flask import Blueprint, request, jsonify
-from flask_jwt_extended import jwt_required
+# from flask_jwt_extended import jwt_required  # ← Comment this out
 from app.services.climate_api_service import get_ai_response
 
 ai_bp = Blueprint('ai', __name__)
 
 @ai_bp.route('/chat', methods=['POST'])
-@jwt_required()
+# @jwt_required()  # ← Comment this out or delete this line
 def chat():
     try:
         data = request.get_json() or {}
@@ -18,7 +18,7 @@ def chat():
                 "error": "Message is required"
             }), 400
 
-        # Format conversation history (if provided)
+        # Format conversation history
         formatted_history = [
             {"role": h.get("role", "user"), "content": h.get("content", "")}
             for h in history
