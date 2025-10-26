@@ -19,7 +19,7 @@ export const reportAPI = {
       throw new Error(error.error || 'Failed to generate report');
     }
     
-//     const data = await response.json();
+    const data = await response.json();
 //     console.log('✅ API Response:', data);
 //     return data;
 //   }
