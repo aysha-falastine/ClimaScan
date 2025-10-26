@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
 from app.database.db import db
-from app.config import DevelopmentConfig
+from config import DevelopmentConfig
 
 def create_app(config_class=DevelopmentConfig):
     """Application factory function"""
@@ -22,7 +22,7 @@ def create_app(config_class=DevelopmentConfig):
     with app.app_context():
         db.create_all()
     
-    return appfrom flask import Flask
+    return app
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from config import config

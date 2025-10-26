@@ -28,7 +28,10 @@ def register_blueprints(app: Flask):
     except ImportError:
         print("⚠️  AI Chat blueprint not found - skipping")
     
-    print("✅ Blueprints registered successfully!")from flask import Blueprint
+    from flask import Blueprint
+
+print("✅ Blueprints registered successfully!")
+
 from .properties import properties_bp
 from .dashboard import dashboard_bp
 
