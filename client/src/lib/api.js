@@ -21,6 +21,6 @@ export const reportAPI = {
     
     const data = await response.json();
     console.log('✅ API Response:', data);
-//     return data;
-//   }
-// };
+    return data;
+  }
+};
