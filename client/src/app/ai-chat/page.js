@@ -461,7 +461,7 @@ export default function AIChatPage() {
               ))}
             </div>
 
-            {selectedProperty && (
+            {/* {selectedProperty && (
               <div className="mt-6 space-y-3">
                 <button
                   onClick={handleGenerateReport}
@@ -546,4 +546,4 @@ export default function AIChatPage() {
       </div>
     </div>
   );
-}
+} */}
