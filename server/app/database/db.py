@@ -17,4 +17,6 @@ def init_db(app):
         # Create all tables
         db.create_all()
         
-        print("Database initialized successfully!")
+        print("Database initialized successfully!")from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy()

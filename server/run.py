@@ -1,6 +1,6 @@
 from app import create_app
 
-app = create_app()
+app = create_app('development')
 
 # ✅ Add this route to test your API base URL
 @app.route('/')
