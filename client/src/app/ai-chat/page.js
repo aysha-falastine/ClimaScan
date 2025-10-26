@@ -516,7 +516,7 @@ export default function AIChatPage() {
               <div ref={messagesEndRef} />
             </div>
 
-            {/* <div className="border-t border-gray-200 p-6">
+            <div className="border-t border-gray-200 p-6">
               <div className="flex gap-3">
                 <input
                   type="text"
@@ -546,4 +546,4 @@ export default function AIChatPage() {
       </div>
     </div>
   );
-} */}
+}
