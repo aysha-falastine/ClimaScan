@@ -6,19 +6,23 @@ import { useRouter } from "next/navigation";
 
 export default function DashboardPage() {
   const router = useRouter();
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState({ username: "John Doe" });
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-
     const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    } else {
+    try {
+      const parsedUser = storedUser ? JSON.parse(storedUser) : null;
+      if (parsedUser && parsedUser.username) {
+        setUser(parsedUser);
+      } else {
+        setUser({ username: "John Doe" });
+      }
+    } catch (err) {
+      console.error("Invalid user in localStorage:", err);
       setUser({ username: "John Doe" });
     }
-
 
     const fetchDashboard = async () => {
       try {
@@ -63,7 +67,6 @@ export default function DashboardPage() {
           Add Property
         </button>
 
-
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-10 w-full max-w-3xl">
           <div className="p-4 bg-white shadow rounded-lg text-center border border-gray-200">
             <p className="text-sm text-gray-600">Total Properties</p>
@@ -84,9 +87,7 @@ export default function DashboardPage() {
         </div>
       </div>
 
-
       <div className="mt-16 grid md:grid-cols-2 gap-8 w-full max-w-5xl mx-auto">
-        {/* Properties Chart */}
         <div className="bg-white p-6 shadow rounded-lg border border-gray-200">
           <h3 className="text-lg font-semibold mb-4 text-gray-800">Properties Added per Month</h3>
           <ResponsiveContainer width="100%" height={300}>
@@ -99,7 +100,6 @@ export default function DashboardPage() {
             </BarChart>
           </ResponsiveContainer>
         </div>
-
 
         <div className="bg-white p-6 shadow rounded-lg border border-gray-200">
           <h3 className="text-lg font-semibold mb-4 text-gray-800">Reports Generated per Month</h3>
@@ -126,3 +126,4 @@ export default function DashboardPage() {
     </div>
   );
 }
+
