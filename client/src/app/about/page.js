@@ -7,7 +7,7 @@ import Footer from "@/components/Footer";
 export default function AboutPage() {
   return (
     <main className="min-h-screen bg-white flex flex-col items-center px-6 py-12">
-      <NavBar />
+      {/* <NavBar /> */}
 
       <h1 className="text-3xl font-bold text-[#150B0B] mt-16 mb-12 text-center">
         ABOUT US!
