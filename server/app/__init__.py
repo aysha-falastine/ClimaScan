@@ -1,25 +1,25 @@
 from flask import Flask
 from flask_cors import CORS
-from app.routes.auth import auth_bp
-from app.routes.users import users_bp
-from app.routes.reports import reports_bp
-from app.routes.ai_chat import ai_bp
+from app.database.db import db
+from app.config import DevelopmentConfig
 
-def create_app():
+def create_app(config_class=DevelopmentConfig):
+    """Application factory function"""
     app = Flask(__name__)
     
-    # Enable CORS for frontend requests
+    # Load configuration
+    app.config.from_object(config_class)
+    
+    # Initialize extensions
+    db.init_app(app)
     CORS(app, resources={r"/api/*": {"origins": "*"}})
     
-    # Register blueprints - only the ones you're working on
-    app.register_blueprint(auth_bp, url_prefix='/api/auth')
-    app.register_blueprint(users_bp, url_prefix='/api/users')
-    app.register_blueprint(reports_bp, url_prefix='/api/reports')
-    app.register_blueprint(ai_bp, url_prefix='/api/ai')
+    # Register blueprints
+    from app.routes import register_blueprints
+    register_blueprints(app)
     
-    # Root route
-    @app.route('/')
-    def index():
-        return {'message': '✅ ClimaScan API is running successfully!'}, 200
+    # Create database tables
+    with app.app_context():
+        db.create_all()
     
     return app

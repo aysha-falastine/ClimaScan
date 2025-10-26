@@ -1,37 +1,21 @@
 from flask import Blueprint, request, jsonify
-# from flask_jwt_extended import jwt_required  # ← Comment this out
-from app.services.climate_api_service import get_ai_response
 
 ai_bp = Blueprint('ai', __name__)
 
 @ai_bp.route('/chat', methods=['POST'])
-# @jwt_required()  # ← Comment this out or delete this line
 def chat():
     try:
         data = request.get_json() or {}
-        message = data.get('message')
-        history = data.get('history', [])
-
-        if not message:
-            return jsonify({
-                "success": False,
-                "error": "Message is required"
-            }), 400
-
-        # Format conversation history
-        formatted_history = [
-            {"role": h.get("role", "user"), "content": h.get("content", "")}
-            for h in history
-        ]
-
-        # Call AI response service
-        reply = get_ai_response(message, formatted_history)
-
+        message = data.get('message', '')
+        
+        # Mock response for testing
+        response_text = f"You asked: {message}. This is a test response. OpenAI integration coming soon!"
+        
         return jsonify({
             "success": True,
-            "data": {"response": reply}
+            "data": {"response": response_text}
         }), 200
-
+        
     except Exception as e:
         return jsonify({
             "success": False,

@@ -2,10 +2,10 @@ from app import create_app
 
 app = create_app()
 
-# Add a test route at the root URL
+# ✅ Add this route to test your API base URL
 @app.route('/')
 def home():
-    return {'message': 'Welcome to ClimaScan API'}, 200
+    return {'message': 'ClimaScan API is running'}
 
 if __name__ == "__main__":
     app.run(debug=True)
