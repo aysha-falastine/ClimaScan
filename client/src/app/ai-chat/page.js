@@ -476,7 +476,7 @@ export default function AIChatPage() {
                   onClick={handleExportChat}
                   className="w-full bg-gray-700 text-white px-4 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors flex items-center justify-center gap-2"
                 >
-                  {/* <Download className="w-4 h-4" />
+                  <Download className="w-4 h-4" />
                   Export Chat
                 </button>
               </div>
@@ -546,4 +546,4 @@ export default function AIChatPage() {
       </div>
     </div>
   );
-} */}
+}
