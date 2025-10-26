@@ -536,3 +536,14 @@ export default function AIChatPage() {
                   Send
                 </button>
               </div>
+
+              <p className="text-xs text-gray-500 mt-2">
+                Press Enter to send • Shift+Enter for new line
+              </p>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  );
+}
