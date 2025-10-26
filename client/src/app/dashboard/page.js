@@ -16,7 +16,7 @@ export default function DashboardPage() {
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     } else {
-      setUser({ username: "Asha" });
+      setUser({ username: "John Doe" });
     }
 
 
