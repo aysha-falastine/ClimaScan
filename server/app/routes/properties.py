@@ -64,7 +64,6 @@ def get_properties():
         "pages": pagination.pages
     })
 
-
 # ------------------------
 # READ single property
 # ------------------------
@@ -72,7 +71,6 @@ def get_properties():
 def get_property(id):
     prop = Property.query.get_or_404(id)
     return jsonify(prop.to_dict())
-
 
 # ------------------------
 # UPDATE property
@@ -94,7 +92,6 @@ def update_property(id):
 
     db.session.commit()
     return jsonify(prop.to_dict()), 200
-
 
 # ------------------------
 # DELETE property
