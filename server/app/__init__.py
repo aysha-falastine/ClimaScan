@@ -2,7 +2,10 @@ from flask import Flask
 from flask_cors import CORS
 from flask_migrate import Migrate
 from app.database.db import db
-from config import DevelopmentConfig  
+from flask_jwt_extended import JWTManager
+from config import DevelopmentConfig 
+from app.routes import register_blueprints
+
 
 migrate = Migrate()
 
@@ -15,10 +18,11 @@ def create_app(config_class=DevelopmentConfig):
 
     # Initialize extensions
     db.init_app(app)
-    migrate.init_app(app, db)
 
-    # ✅ Proper CORS setup
+    Migrate(app, db)
+    JWTManager(app)
     CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
+
 
     # Register blueprints
     from app.routes import register_blueprints

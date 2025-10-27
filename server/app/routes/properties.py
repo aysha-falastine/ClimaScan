@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from app.models.property import Property
-from app import db
+from app.database.db import db  # use from app.database.db, not from app import db
 from datetime import datetime
 
 properties_bp = Blueprint("properties_bp", __name__)
@@ -28,7 +28,7 @@ def create_property():
             return jsonify({"error": "Invalid date format, use YYYY-MM-DD"}), 400
     else:
         date_added = datetime.now().date()
-        
+
     new_property = Property(
         name=data["name"],
         location=data["location"],

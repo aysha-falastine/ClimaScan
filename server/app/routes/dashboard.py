@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify
 from app.models.property import Property
+
 from app.database.db import db
 from sqlalchemy import extract, func
 
