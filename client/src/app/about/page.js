@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import NavBar from "@/components/NavBar";
+import NavBar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 export default function AboutPage() {

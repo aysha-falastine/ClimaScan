@@ -1,7 +1,37 @@
 import React from 'react';
 import { FaEnvelope, FaLock } from 'react-icons/fa';
-
+import { useNavigate } from 'react-router-dom'; // for redirect
 const SignupPage = () => {
+const [email, setEmail] = useState('');
+const [password, setPassword] = useState('');
+const [error, setError] = useState('');
+const navigate = useNavigate();
+
+const handleSubmit = async (e) => {
+e.preventDefault();
+setError('');
+  try {
+  const response = await fetch('http://127.0.0.1:5000/api/users/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password }),
+  });
+
+  const data = await response.json();
+
+  if (response.ok) {
+    // ✅ Save token in localStorage
+    localStorage.setItem('token', data.access_token);
+    alert('Login successful!');
+    navigate('/dashboard'); // ✅ redirect to dashboard
+  } else {
+    setError(data.error || 'Login failed. Please try again.');
+  }
+} catch (err) {
+  console.error(err);
+  setError('Server error. Please check your connection.');
+}
+};
   return (
     <div
       className="fixed inset-0 bg-cover bg-center brightness-100"

@@ -1,20 +1,128 @@
+from flask import Blueprint, request, jsonify
 from app.database.db import db
-from werkzeug.security import generate_password_hash, check_password_hash
-from flask import Blueprint
+from app.models.user import User
+from app.middleware.auth_middleware import token_required
+from werkzeug.security import generate_password_hash
 
-bp = Blueprint('users', __name__)
+users_bp = Blueprint('users', __name__, url_prefix='/api/users')
 
-@bp.route('/api/users')
-def get_users():
-    return {'message': 'Users route working'}
+@users_bp.route('/me', methods=['GET'])
+@token_required
+def get_current_user(current_user):
+    """Get current user profile"""
+    try:
+        # Get preferences from JSON field
+        preferences = current_user.preferences or {}
+        
+        return jsonify({
+            'success': True,
+            'user': {
+                'id': current_user.id,
+                'name': current_user.name,
+                'email': current_user.email,
+                'default_location': preferences.get('default_location', 'Kenya'),
+                'default_map_view': preferences.get('default_map_view', 'Street'),
+                'created_at': current_user.created_at.isoformat() if current_user.created_at else None
+            }
+        }), 200
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': f'Error fetching user: {str(e)}'
+        }), 500
 
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    password_hash = db.Column(db.String(128), nullable=False)
+@users_bp.route('/me', methods=['PUT'])
+@token_required
+def update_current_user(current_user):
+    """Update current user profile"""
+    try:
+        data = request.get_json()
+        
+        # Update name if provided
+        if 'name' in data:
+            current_user.name = data['name']
+        
+        # Update email if provided
+        if 'email' in data:
+            # Check if email is already taken by another user
+            existing_user = User.query.filter(
+                User.email == data['email'],
+                User.id != current_user.id
+            ).first()
+            
+            if existing_user:
+                return jsonify({
+                    'success': False,
+                    'message': 'Email already in use by another account'
+                }), 400
+            
+            current_user.email = data['email']
+        
+        # Update password if provided
+        if 'password' in data and data['password']:
+            # Validate password length
+            if len(data['password']) < 6:
+                return jsonify({
+                    'success': False,
+                    'message': 'Password must be at least 6 characters long'
+                }), 400
+            
+            current_user.set_password(data['password'])
+        
+        # Update preferences (stored as JSON)
+        preferences = current_user.preferences or {}
+        
+        if 'default_location' in data:
+            preferences['default_location'] = data['default_location']
+        
+        if 'default_map_view' in data:
+            preferences['default_map_view'] = data['default_map_view']
+        
+        # Save updated preferences
+        current_user.preferences = preferences
+        
+        # Mark updated_at
+        from datetime import datetime
+        current_user.updated_at = datetime.utcnow()
+        
+        db.session.commit()
+        
+        return jsonify({
+            'success': True,
+            'message': 'Profile updated successfully',
+            'user': {
+                'id': current_user.id,
+                'name': current_user.name,
+                'email': current_user.email,
+                'default_location': preferences.get('default_location'),
+                'default_map_view': preferences.get('default_map_view')
+            }
+        }), 200
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({
+            'success': False,
+            'message': f'Error updating profile: {str(e)}'
+        }), 500
 
-    def set_password(self, password):
-        self.password_hash = generate_password_hash(password)
-
-    def check_password(self, password):
-        return check_password_hash(self.password_hash, password)
+@users_bp.route('/me', methods=['DELETE'])
+@token_required
+def delete_current_user(current_user):
+    """Delete current user account"""
+    try:
+        # Delete user (cascade will delete related records)
+        db.session.delete(current_user)
+        db.session.commit()
+        
+        return jsonify({
+            'success': True,
+            'message': 'Account deleted successfully'
+        }), 200
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({
+            'success': False,
+            'message': f'Error deleting account: {str(e)}'
+        }), 500

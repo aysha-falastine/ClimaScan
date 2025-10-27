@@ -53,7 +53,6 @@ export default function ReportsPage() {
   }, []);
 
 
-
   const fetchReport = async (propertyId) => {
     if (!propertyId) return;
     setLoadingReport(true);
