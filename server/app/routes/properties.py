@@ -3,15 +3,17 @@ from app.models.property import Property
 from app.database.db import db  # use from app.database.db, not from app import db
 from datetime import datetime
 
-properties_bp = Blueprint("properties_bp", __name__, url_prefix="/api/properties")
+properties_bp = Blueprint("properties_bp", __name__)
 
-
+# Test route
 @properties_bp.route("/test", methods=["GET"])
 def test_properties():
     return jsonify({"message": "Properties route working!"})
 
-
-@properties_bp.route("", methods=["POST"])
+# ------------------------
+# CREATE new property
+# ------------------------
+@properties_bp.route("/", methods=["POST"])
 def create_property():
     data = request.get_json()
     if not data or not data.get("name") or not data.get("location"):
@@ -39,7 +41,10 @@ def create_property():
     return jsonify(new_property.to_dict()), 201
 
 
-@properties_bp.route("", methods=["GET"])
+# ------------------------
+# READ all properties (GET)
+# ------------------------
+@properties_bp.route("/", methods=["GET"])
 def get_properties():
     search = request.args.get("search", "", type=str)
     page = request.args.get("page", 1, type=int)
@@ -60,12 +65,18 @@ def get_properties():
     })
 
 
+# ------------------------
+# READ single property
+# ------------------------
 @properties_bp.route("/<int:id>", methods=["GET"])
 def get_property(id):
     prop = Property.query.get_or_404(id)
     return jsonify(prop.to_dict())
 
 
+# ------------------------
+# UPDATE property
+# ------------------------
 @properties_bp.route("/<int:id>", methods=["PUT"])
 def update_property(id):
     prop = Property.query.get_or_404(id)
@@ -85,9 +96,12 @@ def update_property(id):
     return jsonify(prop.to_dict()), 200
 
 
+# ------------------------
+# DELETE property
+# ------------------------
 @properties_bp.route("/<int:id>", methods=["DELETE"])
 def delete_property(id):
     prop = Property.query.get_or_404(id)
     db.session.delete(prop)
     db.session.commit()
-    return jsonify({"message": f"Property {id} deleted successfully"})
+    return jsonify({"message": f"Property {id} deleted successfully"}), 200

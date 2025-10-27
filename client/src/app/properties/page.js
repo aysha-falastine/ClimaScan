@@ -20,13 +20,14 @@ export default function PropertiesPage() {
   const fetchProperties = async (query = "", pageNum = 1) => {
     setLoading(true);
     try {
-      const res = await fetch(`${API_URL}?search=${query}&page=${pageNum}&per_page=5`);
+      const res = await fetch(`${API_URL}/?search=${query}&page=${pageNum}&per_page=5`);
+      if (!res.ok) throw new Error("Failed to fetch properties");
       const data = await res.json();
-      console.log("Fetched properties:", data);
+      console.log("Fetched properties data:", data);
       setProperties(data.properties || []);
-      setPage(data.page);
-      setTotalPages(data.pages);
-      setTotalCount(data.total);
+      setPage(data.page || 1);
+      setTotalPages(data.pages || 1);
+      setTotalCount(data.total || 0);
     } catch (err) {
       console.error("Error fetching properties:", err);
     } finally {
@@ -35,14 +36,13 @@ export default function PropertiesPage() {
   };
 
   useEffect(() => {
-    console.log("Fetching from:", `${API_URL}?search=${search}&page=${page}&per_page=5`);
     fetchProperties(search, page);
   }, [search, page]);
 
   const addOrUpdateProperty = async () => {
     if (!form.name || !form.location) return;
     const method = editingId ? "PUT" : "POST";
-    const url = editingId ? `${API_URL}/${editingId}` : API_URL;
+    const url = editingId ? `${API_URL}/${editingId}` : `${API_URL}/`;
     try {
       const res = await fetch(url, {
         method,
@@ -57,17 +57,11 @@ export default function PropertiesPage() {
         const error = await res.json();
         throw new Error(error.error || "Failed to save property");
       }
-      const updatedProp = await res.json();
-      if (editingId) {
-        setProperties((prev) =>
-          prev.map((p) => (p.id === editingId ? updatedProp : p))
-        );
-        setEditingId(null);
-      } else {
-        setProperties((prev) => [...prev, updatedProp]);
-      }
-      fetchProperties();
+      await res.json();
+      await fetchProperties("", 1);
+      setPage(1);
       setForm({ name: "", location: "", date_added: "" });
+      setEditingId(null);
     } catch (err) {
       console.error("Error saving property:", err);
     }
@@ -77,7 +71,7 @@ export default function PropertiesPage() {
     try {
       const res = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
       if (!res.ok) throw new Error("Failed to delete property");
-      setProperties((prev) => prev.filter((p) => p.id !== id));
+      await fetchProperties(search, page);
     } catch (err) {
       console.error("Error deleting property:", err);
     }
@@ -140,25 +134,14 @@ export default function PropertiesPage() {
                 properties.map((p, index) => (
                   <tr
                     key={p.id}
-                    className={`${index % 2 === 0 ? "bg-green-50" : "bg-green-100"
-                      } hover:bg-green-200 transition-colors`}
+                    className={`${index % 2 === 0 ? "bg-green-50" : "bg-green-100"} hover:bg-green-200 transition-colors`}
                   >
                     <td className="py-3 px-6 text-sm text-gray-800">{p.name}</td>
-                    <td className="py-3 px-6 text-sm text-gray-800">
-                      {p.location}
-                    </td>
-                    <td className="py-3 px-6 text-sm text-gray-800">
-                      {p.date_added || "-"}
-                    </td>
+                    <td className="py-3 px-6 text-sm text-gray-800">{p.location}</td>
+                    <td className="py-3 px-6 text-sm text-gray-800">{p.date_added || "-"}</td>
                     <td className="py-3 px-6 flex gap-4 text-gray-700">
-                      <FiEdit2
-                        onClick={() => startEditing(p)}
-                        className="cursor-pointer hover:text-blue-600"
-                      />
-                      <FiTrash2
-                        onClick={() => deleteProperty(p.id)}
-                        className="cursor-pointer hover:text-red-600"
-                      />
+                      <FiEdit2 onClick={() => startEditing(p)} className="cursor-pointer hover:text-blue-600" />
+                      <FiTrash2 onClick={() => deleteProperty(p.id)} className="cursor-pointer hover:text-red-600" />
                     </td>
                   </tr>
                 ))
@@ -217,9 +200,7 @@ export default function PropertiesPage() {
             <input
               type="date"
               value={form.date_added}
-              onChange={(e) =>
-                setForm({ ...form, date_added: e.target.value })
-              }
+              onChange={(e) => setForm({ ...form, date_added: e.target.value })}
               className="border border-gray-400 rounded-full px-5 py-2 bg-green-50 text-gray-800 placeholder-gray-500 focus:outline-none focus:border-green-500"
             />
           </div>
