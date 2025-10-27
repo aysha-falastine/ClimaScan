@@ -377,7 +377,7 @@ export default function AIChatPage() {
       
       const reportMessage = {
         id: Date.now() + 1,
-        text: `✅ Climate Risk Report Generated!\n\nProperty: ${selectedProperty.name}\nOverall Risk Score: ${reportData.overall_score}%\n\n${reportData.ai_summary}\n\nThe report has been saved and is available in your Reports section.`,
+        text: `Climate Risk Report Generated!\n\nProperty: ${selectedProperty.name}\nOverall Risk Score: ${reportData.overall_score}%\n\n${reportData.ai_summary}\n\nThe report has been saved and is available in your Reports section.`,
         isUser: false,
         timestamp: new Date(),
         reportData: reportData,
@@ -493,13 +493,13 @@ export default function AIChatPage() {
             <div ref={chatContainerRef} className="flex-1 overflow-y-auto p-6 space-y-4">
               {messages.length === 0 && <WelcomeMessage />}
               
-              {!selectedProperty && messages.length > 0 && (
-                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-center">
-                  <p className="text-sm text-yellow-800">
-                    ⚠️ Please select a property to get personalized climate risk analysis
-                  </p>
-                </div>
-              )}
+             {!selectedProperty && messages.length > 0 && (
+  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
+    <p className="text-sm text-blue-800">
+      💡 Select a property for personalized analysis, or continue with general questions
+    </p>
+  </div>
+)}
               
               {messages.map(message => (
                 <ChatMessage 
@@ -523,13 +523,13 @@ export default function AIChatPage() {
                   value={inputMessage}
                   onChange={(e) => setInputMessage(e.target.value)}
                   onKeyPress={handleKeyPress}
-                  placeholder={selectedProperty ? `Ask about ${selectedProperty.name}...` : "Select a property to start chatting..."}
-                  disabled={isLoading || !selectedProperty}
+                 placeholder={selectedProperty ? `Ask about ${selectedProperty.name}...` : "Ask me about climate risks or general questions..."}
+                 disabled={isLoading}
                   className="flex-1 bg-white border border-gray-300 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-[#5DABBC] focus:border-[#5DABBC] outline-none disabled:bg-gray-100 disabled:cursor-not-allowed"
                 />
                 <button
                   onClick={handleSendMessage}
-                  disabled={isLoading || !inputMessage.trim() || !selectedProperty}
+                 disabled={isLoading || !inputMessage.trim()}
                   className="bg-[#2D5F3F] text-white px-6 py-3 rounded-lg font-medium hover:bg-[#234a32] transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center gap-2"
                 >
                   <Send className="w-4 h-4" />

@@ -1,8 +1,8 @@
 from app import create_app
+from config import config  # ✅ CORRECT
 
-app = create_app('development')
+app = create_app(config['development'])  # ✅ use the development config class
 
-# ✅ Add this route to test your API base URL
 @app.route('/')
 def home():
     return {'message': 'ClimaScan API is running'}
