@@ -1,9 +1,9 @@
 from flask import Blueprint, request, jsonify
 from app.models.property import Property
-from app import db
+from app.database.db import db  # use from app.database.db, not from app import db
 from datetime import datetime
 
-properties_bp = Blueprint("properties", __name__)
+properties_bp = Blueprint("properties_bp", __name__, url_prefix="/api/properties")
 
 
 @properties_bp.route("/test", methods=["GET"])
@@ -26,21 +26,17 @@ def create_property():
             return jsonify({"error": "Invalid date format, use YYYY-MM-DD"}), 400
     else:
         date_added = datetime.now().date()
-        
+
     new_property = Property(
         name=data["name"],
         location=data["location"],
         date_added=date_added
     )
 
-
     db.session.add(new_property)
     db.session.commit()
 
-    db.session.refresh(new_property)
-    
     return jsonify(new_property.to_dict()), 201
-
 
 
 @properties_bp.route("", methods=["GET"])
@@ -64,7 +60,6 @@ def get_properties():
     })
 
 
-
 @properties_bp.route("/<int:id>", methods=["GET"])
 def get_property(id):
     prop = Property.query.get_or_404(id)
@@ -79,7 +74,6 @@ def update_property(id):
     prop.name = data.get("name", prop.name)
     prop.location = data.get("location", prop.location)
 
-    
     date_str = data.get("date_added")
     if date_str:
         try:
@@ -89,8 +83,6 @@ def update_property(id):
 
     db.session.commit()
     return jsonify(prop.to_dict()), 200
-
-
 
 
 @properties_bp.route("/<int:id>", methods=["DELETE"])
