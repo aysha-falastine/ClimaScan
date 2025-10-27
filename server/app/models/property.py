@@ -18,6 +18,10 @@ class Property(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
+    reports = db.relationship('Report', backref='property', lazy=True, cascade='all, delete-orphan')
+
+
+
     def __repr__(self):
         return f"<Property {self.id} {self.name}>"
     

@@ -74,17 +74,18 @@ export default function DashboardPage() {
           </div>
           <div className="p-4 bg-white shadow rounded-lg text-center border border-gray-200">
             <p className="text-sm text-gray-600">Reports Generated</p>
-            <p className="text-2xl font-bold text-blue-700">—</p>
+            <p className="text-2xl font-bold text-blue-700">{data.reports_generated}</p>
           </div>
           <div className="p-4 bg-white shadow rounded-lg text-center border border-gray-200">
             <p className="text-sm text-gray-600">High-Risk Properties</p>
-            <p className="text-2xl font-bold text-red-600">—</p>
+            <p className="text-2xl font-bold text-red-600">{data.high_risk_properties}</p>
           </div>
           <div className="p-4 bg-white shadow rounded-lg text-center border border-gray-200">
             <p className="text-sm text-gray-600">Average Risk</p>
-            <p className="text-2xl font-bold text-yellow-600">—</p>
+            <p className="text-2xl font-bold text-yellow-600">{data.average_risk}</p>
           </div>
         </div>
+
       </div>
 
       <div className="mt-16 grid md:grid-cols-2 gap-8 w-full max-w-5xl mx-auto">
@@ -104,16 +105,7 @@ export default function DashboardPage() {
         <div className="bg-white p-6 shadow rounded-lg border border-gray-200">
           <h3 className="text-lg font-semibold mb-4 text-gray-800">Reports Generated per Month</h3>
           <ResponsiveContainer width="100%" height={300}>
-            <BarChart
-              data={[
-                { month: "Jan", count: 1 },
-                { month: "Feb", count: 2 },
-                { month: "Mar", count: 0 },
-                { month: "Apr", count: 3 },
-                { month: "May", count: 1 },
-                { month: "Jun", count: 2 },
-              ]}
-            >
+            <BarChart data={data.monthly_reports}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="month" />
               <YAxis />
@@ -121,6 +113,7 @@ export default function DashboardPage() {
               <Bar dataKey="count" fill="#2563eb" radius={[5, 5, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
+
         </div>
       </div>
     </div>

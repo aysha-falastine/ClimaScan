@@ -52,6 +52,7 @@ export default function ReportsPage() {
     fetchAllProperties();
   }, []);
 
+
   const fetchReport = async (propertyId) => {
     if (!propertyId) return;
     setLoadingReport(true);
@@ -69,6 +70,7 @@ export default function ReportsPage() {
       setLoadingReport(false);
     }
   };
+
 
   const handleReanalyze = async () => {
     if (!selectedProperty) return;
@@ -88,6 +90,7 @@ export default function ReportsPage() {
       setLoading(false);
     }
   };
+
 
   const handleExport = async () => {
     if (!selectedProperty) return;
@@ -149,6 +152,7 @@ export default function ReportsPage() {
               </select>
             </section>
 
+
             {selectedProperty && reportData && (
               <>
                 <section className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
@@ -162,6 +166,7 @@ export default function ReportsPage() {
                     Location: {selectedProperty.location}
                   </p>
                 </section>
+
 
                 <section className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                   <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
@@ -199,6 +204,7 @@ export default function ReportsPage() {
                     </div>
                   </div>
                 </section>
+
 
                 <div className="flex justify-center gap-4">
                   <button
