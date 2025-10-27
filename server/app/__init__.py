@@ -1,12 +1,11 @@
 from flask import Flask
-from .config import DevelopmentConfig
+from config import config
 from app.database.db import db
 from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
-from app.routes import register_blueprints  # centralized blueprint setup
-from config import config
-from flask_sqlalchemy import SQLAlchemy
+from app.routes import register_blueprints
+
 
 def create_app(config_name='default'):
     app = Flask(__name__)
@@ -20,8 +19,7 @@ def create_app(config_name='default'):
     db.init_app(app)
     Migrate(app, db)
     JWTManager(app)
-    CORS(app)
 
-    register_blueprints(app)  # clean, centralized blueprint registration
+    register_blueprints(app)
 
     return app
