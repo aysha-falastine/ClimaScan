@@ -1,9 +1,11 @@
 from flask import Blueprint, jsonify, request
 from app.services.ai_chat_service import get_chat_service
 
-ai_chat_bp = Blueprint('ai_chat', __name__)
+# Exported blueprint variable expected by register_blueprints: ai_bp
+ai_bp = Blueprint('ai', __name__)
 
-@ai_chat_bp.route('/ai/chat', methods=['POST', 'OPTIONS'])
+
+@ai_bp.route('/chat', methods=['POST', 'OPTIONS'])
 def ai_chat():
     """Handle AI chat messages"""
     if request.method == 'OPTIONS':
@@ -41,7 +43,6 @@ def ai_chat():
         }), 200
         
     except Exception as e:
-        print(f"Error in ai_chat endpoint: {str(e)}")
         return jsonify({
             'success': False,
             'error': f'Internal server error: {str(e)}'
