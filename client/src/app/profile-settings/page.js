@@ -1,11 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { LayoutDashboard, Home, FileText, MessageSquare, User, LogOut, Eye, EyeOff, Edit2, Check, X } from 'lucide-react';
 
 const API_BASE_URL = 'http://127.0.0.1:5000/api';
 
-const Sidebar = () => (
+const Sidebar = ({ onLogout }) => (
   <div className="w-28 bg-gray-50 border-r border-gray-200 h-screen fixed left-0 top-0 flex flex-col items-center py-8">
     <div className="mb-12">
       <h1 className="text-lg font-bold text-center">
@@ -22,7 +23,10 @@ const Sidebar = () => (
     </nav>
     
     <div className="mt-auto">
-      <NavIcon href="/logout" icon={LogOut} label="Log Out" />
+      <button onClick={onLogout} className="flex flex-col items-center gap-2 p-3 rounded-lg transition-all text-gray-600 hover:text-green-800 w-full">
+        <LogOut className="w-6 h-6" />
+        <span className="text-xs font-medium">Log Out</span>
+      </button>
     </div>
   </div>
 );
@@ -40,21 +44,69 @@ const NavIcon = ({ href, icon: Icon, label, active }) => (
 );
 
 export default function ProfileSettingsPage() {
+  const router = useRouter();
   const [formData, setFormData] = useState({
-    name: 'julius',
-    email: 'juliuskedienye61@gmail.com',
+    name: '',
+    email: '',
     password: ''
   });
 
   const [preferences, setPreferences] = useState({
-    location: 'Nairobi',
-    mapView: 'Satellite'
+    location: '',
+    mapView: ''
   });
 
   const [showPassword, setShowPassword] = useState(false);
   const [saveStatus, setSaveStatus] = useState('');
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch user profile data on mount
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+      if (!token) {
+        router.push('/login');
+        return;
+      }
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/users/me`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (!response.ok) {
+          if (response.status === 401) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            router.push('/login');
+            return;
+          }
+          throw new Error('Failed to fetch profile');
+        }
+
+        const data = await response.json();
+        setFormData({
+          name: data.name || '',
+          email: data.email || '',
+          password: ''
+        });
+        setPreferences({
+          location: data.defaultLocation || 'Nairobi',
+          mapView: data.defaultMapView || 'Satellite'
+        });
+      } catch (error) {
+        console.error('Error fetching profile:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, [router]);
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -68,12 +120,14 @@ export default function ProfileSettingsPage() {
 
   const handleSaveChanges = async () => {
     setSaveStatus('saving');
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
     
     try {
       const response = await fetch(`${API_BASE_URL}/users/me`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
           name: formData.name,
@@ -99,19 +153,47 @@ export default function ProfileSettingsPage() {
   };
 
   const confirmDelete = async () => {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
     try {
-      console.log('Account deletion requested');
-      alert('Account deleted successfully');
-      setShowDeleteConfirm(false);
+      const response = await fetch(`${API_BASE_URL}/users/me`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      if (response.ok) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        alert('Account deleted successfully');
+        router.push('/login');
+      } else {
+        throw new Error('Failed to delete account');
+      }
     } catch (error) {
       console.error('Delete error:', error);
       alert('Failed to delete account');
     }
+    setShowDeleteConfirm(false);
   };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    router.push('/login');
+  };
+
+  if (loading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <p className="text-gray-600">Loading profile...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-screen bg-gradient-to-br from-gray-50 to-green-50">
-      <Sidebar />
+      <Sidebar onLogout={handleLogout} />
       
       <div className="flex-1 ml-28">
         <header className="bg-white/80 backdrop-blur-sm border-b border-gray-200 px-8 py-4 flex items-center justify-between sticky top-0 z-10">
