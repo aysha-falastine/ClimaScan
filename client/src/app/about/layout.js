@@ -1,5 +1,11 @@
-import SidebarLayout from "@/components/SideBar";
+"use client";
+import NavBar from "@/components/NavBar";
 
-export default function PropertiesLayout({ children }) {
-  return <SidebarLayout>{children}</SidebarLayout>;
+export default function AboutLayout({ children }) {
+  return (
+    <>
+      <NavBar />
+      {children}
+    </>
+  );
 }
