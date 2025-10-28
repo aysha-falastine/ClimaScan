@@ -24,7 +24,7 @@ export default function ContactForm() {
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
-      {/* <NavBar /> */}
+      <NavBar /> 
 
 
       <h1 className="text-4xl font-bold text-[#150B0B] text-center mt-24 mb-10">
