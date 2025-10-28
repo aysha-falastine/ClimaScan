@@ -1,5 +1,4 @@
 import random
-
 def generate_report_data(property_obj):
     # Mock AI or sensor-based climate risk calculation
     return {
@@ -7,6 +6,7 @@ def generate_report_data(property_obj):
         "heat_score": random.randint(50, 85),
         "drainage_score": random.randint(45, 95)
     }
+
 
 def generate_ai_summary(property_obj):
     return (
@@ -16,3 +16,16 @@ def generate_ai_summary(property_obj):
         f"AI Suggestion: Consider implementing green infrastructure and enhanced stormwater "
         f"management systems to mitigate long-term risks."
     )
+
+
+class ReportService:
+    """Compatibility wrapper exposing the expected ReportService symbol."""
+
+    @staticmethod
+    def generate(property_obj):
+        """Return a dict with flood/heat/drainage scores."""
+        return generate_report_data(property_obj)
+
+    @staticmethod
+    def summarize(property_obj):
+        return generate_ai_summary(property_obj)
