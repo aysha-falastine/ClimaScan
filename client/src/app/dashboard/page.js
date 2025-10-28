@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 
 export default function DashboardPage() {
   const router = useRouter();
-  const [user, setUser] = useState({ username: "John Doe" });
+  const [user, setUser] = useState({ name: "User" });
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -14,19 +14,19 @@ export default function DashboardPage() {
     const storedUser = localStorage.getItem("user");
     try {
       const parsedUser = storedUser ? JSON.parse(storedUser) : null;
-      if (parsedUser && parsedUser.username) {
+      if (parsedUser && parsedUser.name) {
         setUser(parsedUser);
       } else {
-        setUser({ username: "John Doe" });
+        setUser({ name: "User" });
       }
     } catch (err) {
       console.error("Invalid user in localStorage:", err);
-      setUser({ username: "John Doe" });
+      setUser({ name: "User" });
     }
 
     const fetchDashboard = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:5000/api/dashboard");
+        const response = await fetch("http://127.0.0.1:5000/api/dashboard/");
         const result = await response.json();
         setData(result);
       } catch (error) {
@@ -45,7 +45,7 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-gray-50 text-gray-800 p-6">
       <header className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-semibold">Hi, {user.username} 👋</h1>
+        <h1 className="text-2xl font-semibold">Hi {user.name}, welcome to your dashboard 👋</h1>
       </header>
 
       <div className="flex flex-col items-center justify-center text-center">
@@ -55,7 +55,7 @@ export default function DashboardPage() {
           className="w-40 h-40 mb-6 opacity-80"
         />
         <h2 className="text-xl font-semibold mb-2">
-          Welcome, {user.username} 🌤
+          Welcome, {user.name} 🌤
         </h2>
         <p className="text-black mb-6">
           Here’s an overview of your climate data and activity this year.
