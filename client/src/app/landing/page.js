@@ -49,10 +49,10 @@ export default function LandingPage() {
         <img
           src={image}
           alt={title}
-          className="w-full h-56 object-contain bg-white p-4" // ⬆️ increased from h-48 to h-56
+          className="w-full h-56 object-contain bg-white p-4" //  increased from h-48 to h-56
         />
         <div className="p-4">
-          <h3 className="text-xl font-semibold text-green-700 text-center"> {/* ⬆️ changed to green */}
+          <h3 className="text-xl font-semibold text-green-700 text-center"> {/*  changed to green */}
             {title}
           </h3>
         </div>
