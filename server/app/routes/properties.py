@@ -1,104 +1,75 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, jsonify, request
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.models.property import Property
-from app.database.db import db  # use from app.database.db, not from app import db
+from app.database.db import db
 from datetime import datetime
 
-properties_bp = Blueprint("properties_bp", __name__)
+properties_bp = Blueprint("properties", __name__)
 
-# Test route
-@properties_bp.route("/test", methods=["GET"])
-def test_properties():
-    return jsonify({"message": "Properties route working!"})
-
-# ------------------------
-# CREATE new property
-# ------------------------
-@properties_bp.route("/", methods=["POST"])
-def create_property():
-    data = request.get_json()
-    if not data or not data.get("name") or not data.get("location"):
-        return jsonify({"error": "Name and location are required"}), 400
-
-    date_str = data.get("date_added")
-
-    if date_str:
-        try:
-            date_added = datetime.strptime(date_str, "%Y-%m-%d").date()
-        except ValueError:
-            return jsonify({"error": "Invalid date format, use YYYY-MM-DD"}), 400
-    else:
-        date_added = datetime.now().date()
-
-    new_property = Property(
-        name=data["name"],
-        location=data["location"],
-        date_added=date_added
-    )
-
-    db.session.add(new_property)
-    db.session.commit()
-
-    return jsonify(new_property.to_dict()), 201
-
-
-# ------------------------
-# READ all properties (GET)
-# ------------------------
 @properties_bp.route("/", methods=["GET"])
+@jwt_required()
 def get_properties():
-    search = request.args.get("search", "", type=str)
-    page = request.args.get("page", 1, type=int)
-    per_page = request.args.get("per_page", 5, type=int)
+    # 🔍 Debugging line: check incoming headers
+    print("🔍 Incoming headers:", dict(request.headers))
 
-    query = Property.query
+    user_id = int(get_jwt_identity())
+    search = request.args.get("search", "").strip()
+    page = int(request.args.get("page", 1))
+    per_page = int(request.args.get("per_page", 5))
+
+    query = Property.query.filter_by(user_id=user_id)
+
     if search:
         query = query.filter(Property.name.ilike(f"%{search}%"))
 
-    pagination = query.paginate(page=page, per_page=per_page, error_out=False)
-    properties = [prop.to_dict() for prop in pagination.items]
+    pagination = query.order_by(Property.created_at.desc()).paginate(
+        page=page, per_page=per_page, error_out=False
+    )
 
     return jsonify({
-        "properties": properties,
-        "total": pagination.total,
+        "properties": [p.to_dict() for p in pagination.items],
         "page": pagination.page,
-        "pages": pagination.pages
+        "pages": pagination.pages,
+        "total": pagination.total
     })
 
-# ------------------------
-# READ single property
-# ------------------------
-@properties_bp.route("/<int:id>", methods=["GET"])
-def get_property(id):
-    prop = Property.query.get_or_404(id)
-    return jsonify(prop.to_dict())
 
-# ------------------------
-# UPDATE property
-# ------------------------
-@properties_bp.route("/<int:id>", methods=["PUT"])
-def update_property(id):
-    prop = Property.query.get_or_404(id)
+@properties_bp.route("/", methods=["POST"])
+@jwt_required()
+def create_property():
+    user_id = int(get_jwt_identity())
     data = request.get_json()
+    prop = Property(
+        user_id=user_id,
+        name=data.get("name"),
+        location=data.get("location"),
+        date_added=datetime.strptime(data.get("date_added"), "%Y-%m-%d")
+        if data.get("date_added") else None
+    )
+    db.session.add(prop)
+    db.session.commit()
+    return jsonify(prop.to_dict()), 201
 
+
+@properties_bp.route("/<int:property_id>", methods=["PUT"])
+@jwt_required()
+def update_property(property_id):
+    user_id = int(get_jwt_identity())
+    prop = Property.query.filter_by(id=property_id, user_id=user_id).first_or_404()
+    data = request.get_json()
     prop.name = data.get("name", prop.name)
     prop.location = data.get("location", prop.location)
-
-    date_str = data.get("date_added")
-    if date_str:
-        try:
-            prop.date_added = datetime.strptime(date_str, "%Y-%m-%d").date()
-        except ValueError:
-            return jsonify({"error": "Invalid date format, use YYYY-MM-DD"}), 400
-
+    prop.date_added = datetime.strptime(data.get("date_added"), "%Y-%m-%d") \
+        if data.get("date_added") else prop.date_added
     db.session.commit()
-    return jsonify(prop.to_dict()), 200
+    return jsonify(prop.to_dict())
 
-# ------------------------
-# DELETE property
-# ------------------------
-@properties_bp.route("/<int:id>", methods=["DELETE"])
-def delete_property(id):
-    prop = Property.query.get_or_404(id)
+
+@properties_bp.route("/<int:property_id>", methods=["DELETE"])
+@jwt_required()
+def delete_property(property_id):
+    user_id = int(get_jwt_identity())
+    prop = Property.query.filter_by(id=property_id, user_id=user_id).first_or_404()
     db.session.delete(prop)
     db.session.commit()
-    return jsonify({"message": f"Property {id} deleted successfully"}), 200
+    return jsonify({"message": "Property deleted"})
