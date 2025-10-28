@@ -1,14 +1,5 @@
-
-
-import AboutPage from "./about/page";
-import DashboardPage from "./dashboard/page";
-
+import { redirect } from "next/navigation";
 
 export default function Home() {
-  return (
-    <div>
-      <DashboardPage />
-      <AboutPage />
-    </div>
-  );
+  redirect("/landing");
 }
