@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { LayoutDashboard, Home, FileText, MessageSquare, LogOut, User, Send, Download, MapPin, CheckCircle, AlertCircle } from 'lucide-react';
 
 // API Configuration
@@ -27,13 +29,19 @@ const aiChatAPI = {
 
 const reportAPI = {
   generateReport: async (propertyId) => {
-    console.log('🔍 Calling API:', `${API_BASE_URL}/reports/generate`);
+    const endpoint = `${API_BASE_URL}/reports/property/${propertyId}/generate`;
+    console.log('🔍 Calling API:', endpoint);
     console.log('🔍 Property ID:', propertyId);
     
-    const response = await fetch(`${API_BASE_URL}/reports/generate`, {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+    const headers = { 'Content-Type': 'application/json' };
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+    
+    const response = await fetch(endpoint, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ property_id: propertyId })
+      headers: headers
     });
     
     console.log('🔍 Response status:', response.status);
@@ -53,9 +61,15 @@ const reportAPI = {
 const propertyAPI = {
   getAllProperties: async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/properties`, {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+      const headers = { 'Content-Type': 'application/json' };
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+      
+      const response = await fetch(`${API_BASE_URL}/properties/`, {
         method: 'GET',
-        headers: { 'Content-Type': 'application/json' }
+        headers: headers
       });
       
       if (!response.ok) {
@@ -63,7 +77,7 @@ const propertyAPI = {
       }
       
       const data = await response.json();
-      return data.data || data;
+      return data.properties || [];
     } catch (error) {
       console.error('Property fetch error:', error);
       // Return mock data if API fails
@@ -232,14 +246,14 @@ const WelcomeMessage = () => (
 );
 
 // Sidebar Component
-const Sidebar = () => (
+const Sidebar = ({ onLogout }) => (
   <div className="w-28 bg-[#F5F5F5] border-r border-gray-300 h-screen fixed left-0 top-0 flex flex-col items-center py-8">
-    <div className="mb-12">
+    <Link href="/landing" className="mb-12 cursor-pointer hover:opacity-80 transition-opacity">
       <h1 className="text-lg font-bold text-center">
         <div className="text-[#2D5F3F]">Clima</div>
         <div className="text-[#5DABBC]">Scan</div>
       </h1>
-    </div>
+    </Link>
     
     <nav className="flex-1 flex flex-col items-center space-y-6">
       <NavIcon href="/dashboard" icon={LayoutDashboard} label="Dashboard" />
@@ -250,7 +264,10 @@ const Sidebar = () => (
     </nav>
     
     <div className="mt-auto">
-      <NavIcon href="/logout" icon={LogOut} label="Log Out" />
+      <button onClick={onLogout} className="flex flex-col items-center gap-2 p-3 rounded-lg transition-all text-gray-600 hover:text-[#2D5F3F] w-full">
+        <LogOut className="w-6 h-6" />
+        <span className="text-xs font-medium">Log Out</span>
+      </button>
     </div>
   </div>
 );
@@ -270,6 +287,7 @@ const NavIcon = ({ href, icon: Icon, label, active }) => (
 
 // Main AI Chat Page
 export default function AIChatPage() {
+  const router = useRouter();
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -277,6 +295,12 @@ export default function AIChatPage() {
   const [selectedProperty, setSelectedProperty] = useState(null);
   const messagesEndRef = useRef(null);
   const chatContainerRef = useRef(null);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    router.push('/login');
+  };
 
   useEffect(() => {
     fetchProperties();
@@ -422,7 +446,7 @@ export default function AIChatPage() {
 
   return (
     <div className="flex h-screen bg-white">
-      <Sidebar />
+      <Sidebar onLogout={handleLogout} />
       
       <div className="flex-1 ml-28">
         <header className="bg-white border-b border-gray-200 px-8 py-4 flex items-center justify-between">
