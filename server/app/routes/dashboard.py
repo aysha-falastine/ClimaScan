@@ -4,30 +4,26 @@ from app.models.report import Report
 from app.database.db import db
 from sqlalchemy import extract, func
 
-dashboard_bp = Blueprint("dashboard_bp", __name__)
+dashboard_bp = Blueprint("dashboard", __name__)
+
 
 @dashboard_bp.route("/", methods=["GET"])
 def get_dashboard_data():
     try:
-        
         total_properties = Property.query.count()
 
-        
         total_reports = Report.query.count()
 
-        
         high_risk_properties = Report.query.filter(
-            (Report.flood_score > 8.0) | (Report.heat_score > 8.0) | (Report.drainage_score > 8.0)
+            (Report.flood_score > 80) | (Report.heat_score > 80) | (Report.drainage_score > 80)
         ).count()
 
-        
         avg_risk = (
             db.session.query(
                 func.avg((Report.flood_score + Report.heat_score + Report.drainage_score) / 3)
             ).scalar() or 0
         )
 
-        
         monthly_props = (
             db.session.query(
                 extract('month', Property.date_added).label('month'),
@@ -42,10 +38,9 @@ def get_dashboard_data():
             if m is not None
         ]
 
-        
         monthly_reports = (
             db.session.query(
-                extract('month', Report.date_generated).label('month'),
+                extract('month', Report.generated_at).label('month'),
                 func.count(Report.id).label('count')
             )
             .group_by('month')
@@ -66,8 +61,7 @@ def get_dashboard_data():
             "monthly_reports": monthly_reports_data
         }), 200
 
-    except Exception as e:
-        print("Dashboard Error:", e)
+    except Exception:
         return jsonify({"error": "Failed to fetch dashboard data"}), 500
 
 
