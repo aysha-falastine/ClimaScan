@@ -15,7 +15,5 @@ def init_db(app):
         from app.models.report import Report
         from app.models.climate_data import ClimateData
 
-        # Create all tables
-        db.create_all()
-
-        print("Database initialized successfully!")
+    # Create all tables
+    db.create_all()
