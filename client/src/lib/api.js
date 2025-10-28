@@ -3,7 +3,8 @@ const API_BASE_URL = 'http://127.0.0.1:5000/api';
 // Helper function to get auth token
 const getAuthToken = () => {
   if (typeof window !== 'undefined') {
-    return localStorage.getItem('auth_token');
+    // Use the same key used by the app login flow ('token')
+    return localStorage.getItem('token');
   }
   return null;
 };
