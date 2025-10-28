@@ -4,13 +4,13 @@ from app.models.user import User
 from app.database.db import db
 from werkzeug.security import generate_password_hash
 
-profile_bp = Blueprint('profile', __name__, url_prefix='/api/users')
+profile_bp = Blueprint('profile', __name__)
 
 @profile_bp.route('/me', methods=['GET'])
 @jwt_required()
 def get_profile():
     """Get current user profile"""
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     user = User.query.get_or_404(user_id)
     
     return jsonify({
@@ -25,7 +25,7 @@ def get_profile():
 @jwt_required()
 def update_profile():
     """Update user profile"""
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     user = User.query.get_or_404(user_id)
     data = request.get_json()
     
@@ -74,7 +74,7 @@ def update_profile():
 @jwt_required()
 def delete_profile():
     """Delete user account"""
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     user = User.query.get_or_404(user_id)
     
     try:
