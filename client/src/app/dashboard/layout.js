@@ -7,7 +7,7 @@ export default function Layout({ children }) {
       {/* Sidebar */}
       <aside className="w-[200px] bg-white shadow-md flex flex-col">
         <nav className="p-6 space-y-4">
-          <div className="flex flex-col items-start leading-tight">
+          <Link href="/landing" className="flex flex-col items-start leading-tight cursor-pointer hover:opacity-80 transition-opacity">
             <h1 className="text-2xl font-bold font-jost">
               <span className="text-[#00AEEF]">Clima</span>
               <span className="text-[#29572C]">Scan</span>
@@ -15,7 +15,7 @@ export default function Layout({ children }) {
             <p className="text-xs text-[#00AEEF] tracking-wide uppercase font-jost mt-1">
               PLANET. DATA. FUTURE.
             </p>
-          </div>
+          </Link>
 
           <ul className="space-y-10 mt-[30px]">
             <li>
