@@ -9,12 +9,12 @@ const Map = dynamic(() => import("@/components/Map"), {
   ssr: false,
   loading: () => <div className="h-full w-full bg-gray-100 flex items-center justify-center text-gray-500">Loading map...</div>
 });
-// Hardcoded for production - change back after presentation
+
 const BASE_URL = "https://climascan.onrender.com";
 const API_URL = `${BASE_URL}/api/properties/`;
 
 
-// Get JWT token from localStorage (safe access)
+
 const getToken = () => localStorage.getItem("token");
 
 const fetchProperties = async (query = "", pageNum = 1) => {
@@ -59,9 +59,9 @@ export default function PropertiesPage() {
     try {
       localStorage.removeItem("token");
     } catch (e) {
-      // ignore
+     
     }
-    // Redirect to login
+    
     router.push("/login");
   };
 
@@ -74,7 +74,7 @@ export default function PropertiesPage() {
       const msg = "Missing authentication token. Please log in.";
       setError(msg);
       setLoading(false);
-      // Keep UI consistent and return the expected shape
+      
       setProperties([]);
       setPage(1);
       setTotalPages(1);
@@ -82,7 +82,7 @@ export default function PropertiesPage() {
       return { properties: [], page: 1, pages: 1, total: 0 };
     }
 
-    // Build query params safely
+    
     const params = new URLSearchParams();
     if (query) params.set("search", query);
     params.set("page", pageNum);
@@ -91,14 +91,14 @@ export default function PropertiesPage() {
     const url = `${API_URL}?${params.toString()}`;
 
     try {
-      // Cancel previous request if still pending
+     
       if (abortControllerRef.current) {
         abortControllerRef.current.abort();
       }
       const controller = new AbortController();
       abortControllerRef.current = controller;
 
-        // Use centralized authFetch helper
+        
         const { authFetch } = await import("@/lib/fetcher");
         const res = await authFetch(url, {
           method: "GET",
@@ -112,7 +112,7 @@ export default function PropertiesPage() {
       }
 
       if (!res.ok) {
-        // Try to parse JSON error body if available
+        
         let errMsg = `Failed to fetch properties (status ${res.status})`;
         try {
           const body = await res.json();
@@ -131,7 +131,7 @@ export default function PropertiesPage() {
         total: data.total || 0,
       };
 
-      // Update UI state
+      
       setProperties(out.properties);
       setPage(out.page);
       setTotalPages(out.pages);
@@ -139,11 +139,11 @@ export default function PropertiesPage() {
 
       return out;
     } catch (err) {
-      // If the fetch was aborted, just return quietly
+      
       if (err && err.name === "AbortError") {
         return { properties: [], page: 1, pages: 1, total: 0 };
       }
-      // Network failures (often CORS or server down) show as TypeError: Failed to fetch
+      
       console.error("Error fetching properties:", err);
       const isNetwork = err instanceof TypeError || /Failed to fetch/i.test(err.message);
       const message = isNetwork
@@ -152,7 +152,7 @@ export default function PropertiesPage() {
 
       setError(message);
 
-      // Reset list to empty on error
+      
       setProperties([]);
       setPage(1);
       setTotalPages(1);
@@ -161,7 +161,7 @@ export default function PropertiesPage() {
       return { properties: [], page: 1, pages: 1, total: 0 };
     } finally {
       setLoading(false);
-      // clear controller if it's the one used for this request
+      
       abortControllerRef.current = null;
     }
   };
@@ -170,7 +170,7 @@ export default function PropertiesPage() {
     fetchProperties(search, page);
   }, [search, page, perPage]);
 
-  // Abort any in-flight request when component unmounts to avoid leaks
+  
   useEffect(() => {
     return () => {
       if (abortControllerRef.current) {
@@ -258,11 +258,11 @@ export default function PropertiesPage() {
 
   return (
     <div className="flex flex-col md:flex-row gap-10 p-6">
-      {/* Properties List */}
+      
       <div className="flex-1">
         <h1 className="text-3xl font-bold text-[#29572C] mb-6">Properties</h1>
 
-        {/* Search */}
+        
         <input
           type="text"
           placeholder="Search property"
@@ -271,7 +271,7 @@ export default function PropertiesPage() {
           className="w-full max-w-md rounded-full border border-gray-300 py-2 px-5 text-sm mb-4"
         />
 
-        {/* Error banner */}
+        
         {error && (
           <div role="alert" aria-live="assertive" className="mb-4 p-3 rounded border border-red-200 bg-red-50 text-red-800 flex items-start justify-between">
             <div className="text-sm">{error}</div>
@@ -284,7 +284,7 @@ export default function PropertiesPage() {
           </div>
         )}
 
-        {/* Table */}
+        
         <div className="overflow-x-auto bg-white rounded-lg shadow-sm border border-gray-100">
           <table className="w-full text-left border-collapse">
             <thead>
@@ -317,7 +317,7 @@ export default function PropertiesPage() {
           </table>
         </div>
 
-        {/* Pagination */}
+        
         <div className="flex items-center justify-between mt-4 max-w-md">
           <button
             disabled={page <= 1}
@@ -349,7 +349,7 @@ export default function PropertiesPage() {
           </button>
         </div>
 
-        {/* Add / Edit Form */}
+        
         <div className="flex flex-wrap gap-3 mt-6 max-w-lg">
           <input
             type="text"
@@ -380,11 +380,10 @@ export default function PropertiesPage() {
         </div>
       </div>
 
-      {/* Map */}
+      
       <div className="w-full md:w-[420px] lg:w-[480px] h-[520px] rounded-2xl overflow-hidden shadow-lg border border-gray-300">
         <Map />
       </div>
     </div>
   );
 }
-// Force rebuild Wed Oct 29 18:50:57 EAT 2025
