@@ -40,7 +40,7 @@ export default function ReportsPage() {
 
       try {
         do {
-          const res = await fetch(`${API_URL}/properties/?page=${page}&per_page=10`, {
+          const res = await fetch(`${API_URL}/api/properties/?page=${page}&per_page=10`, {
             headers: { Authorization: `Bearer ${token}` },
           });
           if (!res.ok) throw new Error("Failed to load properties");
@@ -69,7 +69,7 @@ export default function ReportsPage() {
     if (!propertyId || !token) return;
     setLoadingReport(true);
     try {
-      const res = await fetch(`${API_URL}/reports/property/${propertyId}`, {
+      const res = await fetch(`${API_URL}/api/reports/property/${propertyId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) throw new Error("Failed to load report");
@@ -95,7 +95,7 @@ export default function ReportsPage() {
     if (!selectedProperty || !reportData || !token) return;
     setLoading(true);
     try {
-      const res = await fetch(`${API_URL}/reports/${reportData.id}/re-analyze`, {
+      const res = await fetch(`${API_URL}/api/reports/${reportData.id}/re-analyze`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -116,7 +116,7 @@ export default function ReportsPage() {
     if (!selectedProperty || !token) return;
     setLoading(true);
     try {
-      const res = await fetch(`${API_URL}/reports/property/${selectedProperty.id}/generate`, {
+      const res = await fetch(`${API_URL}/api/reports/property/${selectedProperty.id}/generate`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -136,7 +136,7 @@ export default function ReportsPage() {
   const handleExport = async () => {
     if (!selectedProperty || !reportData || !token) return;
     try {
-      const res = await fetch(`${API_URL}/reports/${reportData.id}/export`, {
+      const res = await fetch(`${API_URL}/api/reports/${reportData.id}/export`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) throw new Error("Export failed");
