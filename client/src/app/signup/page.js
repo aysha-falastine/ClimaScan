@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { useRouter } from "next/navigation"; //  Correct for Next.js routing
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:5000";
 
 const SignupPage = () => {
 const [name, setName] = useState("");
