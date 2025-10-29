@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { useRouter } from "next/navigation";
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_URL = "https://climascan.onrender.com";
 
 const LoginPage = () => {
 const router = useRouter();

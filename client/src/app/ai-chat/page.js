@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { LayoutDashboard, Home, FileText, MessageSquare, LogOut, User, Send, Download, MapPin, CheckCircle, AlertCircle } from 'lucide-react';
 
 // API Configuration
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:5000";
+const API_URL = "https://climascan.onrender.com";
 
 
 // API Service Functions
