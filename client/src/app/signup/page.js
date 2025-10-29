@@ -16,7 +16,7 @@ const handleSubmit = async (e) => {
 e.preventDefault();
 setError("");
   try {
-  const response = await fetch(`${API_URL}/api/users/signup`, {
+  const response = await fetch(`${API_URL}/users/signup`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name, email, password }),

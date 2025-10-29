@@ -30,7 +30,7 @@ const aiChatAPI = {
 
 const reportAPI = {
   generateReport: async (propertyId) => {
-    const endpoint = `${API_BASE_URL}/reports/property/${propertyId}/generate`;
+    const endpoint = `${API_URL}/reports/property/${propertyId}/generate`;
     console.log('🔍 Calling API:', endpoint);
     console.log('🔍 Property ID:', propertyId);
     
@@ -68,7 +68,7 @@ const propertyAPI = {
         headers['Authorization'] = `Bearer ${token}`;
       }
       
-      const response = await fetch(`${API_BASE_URL}/properties/`, {
+      const response = await fetch(`${API_URL}/properties/`, {
         method: 'GET',
         headers: headers
       });

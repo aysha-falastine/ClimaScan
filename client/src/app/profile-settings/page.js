@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { LayoutDashboard, Home, FileText, MessageSquare, User, LogOut, Eye, EyeOff, Edit2, Check, X } from 'lucide-react';
 
-const API_BASE_URL = 'http://127.0.0.1:5000/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const Sidebar = ({ onLogout }) => (
   <div className="w-28 bg-gray-50 border-r border-gray-200 h-screen fixed left-0 top-0 flex flex-col items-center py-8">
@@ -72,7 +72,7 @@ export default function ProfileSettingsPage() {
       }
 
       try {
-        const response = await fetch(`${API_BASE_URL}/users/me`, {
+        const response = await fetch(`${API_URL}/users/me`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -123,7 +123,7 @@ export default function ProfileSettingsPage() {
     const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
     
     try {
-      const response = await fetch(`${API_BASE_URL}/users/me`, {
+      const response = await fetch(`${API_URL}/users/me`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -155,7 +155,7 @@ export default function ProfileSettingsPage() {
   const confirmDelete = async () => {
     const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
     try {
-      const response = await fetch(`${API_BASE_URL}/users/me`, {
+      const response = await fetch(`${API_URL}/users/me`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
