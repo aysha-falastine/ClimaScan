@@ -341,6 +341,8 @@ docker build -t climate-risk-frontend ./frontend
 docker run -p 3000:3000 climate-risk-frontend
 ________________________________________
 📁 Project Structure
+
+```
 ai-climate-risk-detector/
 ├── backend/
 │   ├── app/
@@ -408,6 +410,7 @@ ai-climate-risk-detector/
 │
 ├── README.md
 └── LICENSE
+```
 ________________________________________
 🤝 Contributing
 We welcome contributions! Please follow these guidelines:
