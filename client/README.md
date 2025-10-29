@@ -1,63 +1,64 @@
-AI Climate Risk Detector For Real Estate 🌍🏠
+# AI Climate Risk Detector For Real Estate 🌍🏠
 A web application that generates localized, AI-powered climate risk reports and interactive maps for properties, helping buyers, developers, and investors make safer, more resilient real estate decisions.
 Supporting UN SDG 13 (Climate Action) and SDG 11 (Sustainable Cities & Communities)
 ________________________________________
 
- Overview
+ ## Overview
 The AI Climate Risk Detector addresses a critical gap in real estate decision-making: the lack of accessible, localized climate risk assessments. Homebuyers, developers, and investors often overlook detailed climate hazards like flooding, heat stress, coastal erosion, and drainage issues when evaluating properties.
 This platform:
 •	Aggregates fragmented public climate data
 •	Generates AI-powered, plain-language risk reports
 •	Provides interactive maps with hazard overlays
 •	Offers actionable mitigation recommendations
-•	✅ Exports professional PDF reports for due diligence
+•	Exports professional PDF reports for due diligence
 ________________________________________
-✨ Features
-Core Functionality
-•	🔐 User Authentication - JWT-based secure access with role-based permissions (buyer, agent, developer, admin)
-•	🗺 Interactive Property Mapping - Visualize properties on Mapbox/Leaflet with hazard overlays
-•	📊 Hazard Analysis - Real-time calculation of flood risk, slope stability, heat stress, and drainage proxies
-•	🤖 AI Risk Reports - OpenAI-powered synthesis of climate data into actionable insights
-•	📄 PDF Export - Professional reports for clients and stakeholders
-•	📈 Analytics Dashboard - Admin view of risk trends and user activity
-•	💾 Report Management - Save, compare, and retrieve historical assessments
-Hazard Types Analyzed
-•	Flooding - 100-year flood zones, elevation analysis, proximity to water bodies
-•	Slope Stability - Landslide risk based on terrain gradient
-•	Heat Stress - Urban heat island effects and temperature anomalies
-•	Drainage - Impervious surface analysis and stormwater risk
-•	Coastal Erosion - Sea-level rise projections and shoreline proximity
+## ✨ Features
+### Core Functionality
+- 🔐 User Authentication - JWT-based secure access with role-based permissions (buyer, agent, developer, admin)
+- 🗺 Interactive Property Mapping - Visualize properties on Mapbox/Leaflet with hazard overlays
+- 📊 Hazard Analysis - Real-time calculation of flood risk, slope stability, heat stress, and drainage proxies
+- 🤖 AI Risk Reports - OpenAI-powered synthesis of climate data into actionable insights
+- 📄 PDF Export - Professional reports for clients and stakeholders
+- 📈 Analytics Dashboard - Admin view of risk trends and user activity
+- 💾 Report Management - Save, compare, and retrieve historical assessments
+### Hazard Types Analyzed
+- Flooding - 100-year flood zones, elevation analysis, proximity to water bodies
+- Slope Stability - Landslide risk based on terrain gradient
+- Heat Stress - Urban heat island effects and temperature anomalies
+- Drainage - Impervious surface analysis and stormwater risk
+- Coastal Erosion - Sea-level rise projections and shoreline proximity
 ________________________________________
-🛠 Tech Stack
-Backend
-•	Framework: Flask (Python) with Flask-RESTful
-•	Database: PostgreSQL (with optional PostGIS extension)
-•	ORM: SQLAlchemy
-•	Validation: Marshmallow
-•	Authentication: Flask-JWT-Extended
-•	AI Integration: OpenAI API (GPT-4)
-•	Testing: Pytest
-•	API Docs: Swagger/OpenAPI
-Frontend
-•	Framework: Next.js 14+ (React)
-•	Styling: TailwindCSS
-•	Mapping: Mapbox GL JS / Leaflet
-•	Charts: Recharts
-•	State Management: Context API
-•	HTTP Client: Axios
-•	Testing: Jest + React Testing Library
-Data Sources
-•	NASA SEDAC Climate Data
-•	Copernicus Climate Data Store
-•	World Bank Climate Knowledge Portal
-•	SRTM Elevation Data
-•	NOAA Climate Normals
-Deployment
-•	Backend: Render
-•	Frontend: Vercel
-•	CI/CD: GitHub Actions
+### 🛠 Tech Stack
+#### Backend
+- Framework: Flask (Python) with Flask-RESTful
+- Database: PostgreSQL (with optional PostGIS extension)
+- ORM: SQLAlchemy
+- Validation: Marshmallow
+- Authentication: Flask-JWT-Extended
+- AI Integration: OpenAI API (GPT-4)
+- Testing: Pytest
+- API Docs: Swagger/OpenAPI
+#### Frontend
+- Framework: Next.js 14+ (React)
+- Styling: TailwindCSS
+- Mapping: Mapbox GL JS / Leaflet
+- Charts: Recharts
+- State Management: Context API
+- HTTP Client: Axios
+- Testing: Jest + React Testing Library
+#### Data Sources
+- NASA SEDAC Climate Data
+- Copernicus Climate Data Store
+- World Bank Climate Knowledge Portal
+- SRTM Elevation Data
+- NOAA Climate Normals
+#### Deployment
+- Backend: Render
+- Frontend: Vercel
+- CI/CD: GitHub Actions
 ________________________________________
-🏗 Architecture
+## 🏗 Architecture
+```
 ┌─────────────┐         ┌──────────────┐         ┌─────────────┐
 │   Next.js   │────────▶│  Flask API   │────────▶│ PostgreSQL  │
 │  Frontend   │◀────────│   Backend    │◀────────│  Database   │
@@ -73,17 +74,18 @@ ________________________________________
                         │ Sources (NASA,  │
                         │ Copernicus, WB) │
                         └─────────────────┘
+
+```
+### 🚀 Getting Started
+#### Prerequisites
+- Python 3.9+
+- Node.js 18+
+- PostgreSQL 15+
+- Git
+- OpenAI API Key
+- Mapbox Access Token (or Leaflet alternative)
 ________________________________________
-🚀 Getting Started
-Prerequisites
-•	Python 3.9+
-•	Node.js 18+
-•	PostgreSQL 15+
-•	Git
-•	OpenAI API Key
-•	Mapbox Access Token (or Leaflet alternative)
-________________________________________
-Backend Setup
+#### Backend Setup
 1.	Clone the repository
 bash
 git clone https://github.com/yourusername/ai-climate-risk-detector.git
@@ -168,7 +170,8 @@ NEXT_PUBLIC_MAPBOX_TOKEN=pk.your-mapbox-token
 NEXT_PUBLIC_APP_NAME=AI Climate Risk Detector
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 ________________________________________
-📚 API Documentation
+### 📚 API Documentation
+```
 Authentication Endpoints
 •	POST /api/auth/register - Register new user
 •	POST /api/auth/login - Login and get JWT token
@@ -190,8 +193,10 @@ Report Endpoints
 Analytics Endpoints (Admin)
 •	GET /api/reports/summary - Aggregated risk statistics
 Full Swagger documentation available at: /api/docs
-________________________________________
-🗄 Database Schema
+
+```
+### 🗄 Database Schema
+```
 Users Table
 sql
 CREATE TABLE users (
@@ -246,9 +251,10 @@ CREATE TABLE property_hazards (
     UNIQUE(property_id, hazard_id)
 );
 Complete ERD available in: /docs/database-diagram.png
-________________________________________
-🤖 AI Integration
-Risk Report Generation Workflow
+
+```
+### 🤖 AI Integration
+#### Risk Report Generation Workflow
 1.	User Request → /api/properties/{id}/analyze
 2.	Data Gathering: 
 o	Fetch property coordinates and type
@@ -286,7 +292,7 @@ Caching Strategy
 •	Rate limit: 10 requests per user per hour
 •	Re-analysis allowed after significant data updates
 ________________________________________
-🧪 Testing
+### 🧪 Testing
 Backend Tests (Pytest)
 bash
 cd backend
@@ -312,7 +318,7 @@ yaml
 - Build Docker images
 - Deploy to staging (on merge to develop)
 ________________________________________
-🚀 Deployment
+### 🚀 Deployment
 Backend Deployment (Render)
 1.	Create Render account and connect GitHub repo
 2.	New Web Service: 
@@ -332,15 +338,16 @@ Frontend Deployment (Vercel)
 Live Frontend: https://your-app.vercel.app
 Docker Deployment (Optional)
 bash
-# Backend
+#### Backend
 docker build -t climate-risk-backend ./backend
 docker run -p 5000:5000 climate-risk-backend
 
-# Frontend
+#### Frontend
 docker build -t climate-risk-frontend ./frontend
 docker run -p 3000:3000 climate-risk-frontend
 ________________________________________
-📁 Project Structure
+### 📁 Project Structure
+```
 ai-climate-risk-detector/
 ├── backend/
 │   ├── app/
@@ -408,60 +415,44 @@ ai-climate-risk-detector/
 │
 ├── README.md
 └── LICENSE
+```
 ________________________________________
-🤝 Contributing
+### 🤝 Contributing
 We welcome contributions! Please follow these guidelines:
 1.	Fork the repository
 2.	Create a feature branch: git checkout -b feature/amazing-feature
 3.	Commit changes: git commit -m 'Add amazing feature'
 4.	Push to branch: git push origin feature/amazing-feature
 5.	Open Pull Request
-Development Workflow
-•	Branch naming: feature/, bugfix/, hotfix/
-•	Commits: Use conventional commits (feat, fix, docs, etc.)
-•	Code style: Black (Python), ESLint (JavaScript)
-•	Tests: All new features must include tests
-•	Documentation: Update README and API docs
+### Development Workflow
+- Branch naming: feature/, bugfix/, hotfix/
+- Commits: Use conventional commits (feat, fix, docs, etc.)
+- Code style: Black (Python), ESLint (JavaScript)
+- Tests: All new features must include tests
+- Documentation: Update README and API docs
 ________________________________________
-⚖ Disclaimers & Ethics
+### ⚖ Disclaimers & Ethics
 Important Legal Notice:
-•	AI-generated risk assessments are based on available public data and should NOT be used as the sole basis for legal, financial, or construction decisions
-•	Users are advised to consult licensed engineers, surveyors, and legal professionals for critical property evaluations
-•	Risk scores are estimates and may not reflect real-time conditions or localized microclimates
-•	Climate projections involve uncertainty; mitigation recommendations are suggestive, not prescriptive
-Privacy & Data:
-•	User data and property reports are access-controlled
-•	No personal data is shared with third parties without consent
-•	AI analysis logs are retained for quality improvement only
+- AI-generated risk assessments are based on available public data and should NOT be used as the sole basis for legal, financial, or construction decisions
+- Users are advised to consult licensed engineers, surveyors, and legal professionals for critical property evaluations
+- Risk scores are estimates and may not reflect real-time conditions or localized microclimates
+- Climate projections involve uncertainty; mitigation recommendations are suggestive, not prescriptive
+### Privacy & Data:
+- User data and property reports are access-controlled
+- No personal data is shared with third parties without consent
+- AI analysis logs are retained for quality improvement only
 ________________________________________
-📄 License
+### 📄 License
 This project is licensed under the MIT License - see the LICENSE file for details.
 ________________________________________
-🌟 Acknowledgments
-•	UN SDG 13 & 11 for inspiring climate-resilient urban development
-•	NASA SEDAC, Copernicus, World Bank for open climate data
-•	Huggingface API
-•	Mapbox for mapping infrastructure
+### 🌟 Acknowledgments
+- UN SDG 13 & 11 for inspiring climate-resilient urban development
+- NASA SEDAC, Copernicus, World Bank for open climate data
+- Huggingface API
+- Mapbox for mapping infrastructure
 ________________________________________
-📞 Support
-•	Issues: GitHub Issues
-•	Discussions: GitHub Discussions
-•	Email: support@climateriskrisk.com
-________________________________________
-🗺 Roadmap
-Phase 1 (MVP - Complete)
-•	✅ Core CRUD operations
-•	✅ AI risk report generation
-•	✅ Interactive mapping
-•	✅ PDF export
-Phase 2 (Q2 2025)
-•	🔄 Real-time weather API integration
-•	🔄 Insurance premium estimator
-•	🔄 Multi-property comparison dashboard
-•	🔄 Mobile app (React Native)
-Phase 3 (Q3 2025)
-•	📋 Integration with MLS databases
-•	📋 Blockchain-verified reports (NFT certificates)
-•	📋 Developer API for third-party integrations
-•	📋 AI model fine-tuning with proprietary datasets
+### 📞 Support
+- Issues: GitHub Issues
+- Discussions: GitHub Discussions
+- Email: support@climateriskrisk.com
 ________________________________________
