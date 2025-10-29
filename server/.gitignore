@@ -18,7 +18,7 @@ env/
 
 # Flask/Migrations
 instance/
-migrations/versions/
+# migrations/versions/  # REMOVED: We need migrations in production
 *.db
 *.sqlite3
 
