@@ -88,7 +88,7 @@ ________________________________________
 #### Backend Setup
 1.	Clone the repository
 bash
-git clone https://github.com/yourusername/ai-climate-risk-detector.git
+git clone https://github.com/aysha-falastine/ClimaScan
 cd ai-climate-risk-detector/backend
 2.	Create virtual environment
 bash
