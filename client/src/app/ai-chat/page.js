@@ -6,12 +6,13 @@ import Link from 'next/link';
 import { LayoutDashboard, Home, FileText, MessageSquare, LogOut, User, Send, Download, MapPin, CheckCircle, AlertCircle } from 'lucide-react';
 
 // API Configuration
-const API_BASE_URL = 'http://127.0.0.1:5000/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 
 // API Service Functions
 const aiChatAPI = {
   sendMessage: async (message, history) => {
-    const response = await fetch(`${API_BASE_URL}/ai/chat`, {
+    const response = await fetch(`${API_URL}/ai-chat/`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message, history })

@@ -3,7 +3,7 @@ import "./globals.css";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Jost, Poppins } from "next/font/google";
 
-// ✅ Font setup
+//  Font setup
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],

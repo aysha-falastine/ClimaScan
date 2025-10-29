@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { useRouter } from "next/navigation";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -26,7 +27,7 @@ export default function DashboardPage() {
 
     const fetchDashboard = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:5000/api/dashboard/");
+        const response = await fetch(`${API_URL}/api/dashboard/`);
         const result = await response.json();
         setData(result);
       } catch (error) {

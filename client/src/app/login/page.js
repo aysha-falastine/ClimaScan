@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { useRouter } from "next/navigation";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const LoginPage = () => {
 const router = useRouter();
@@ -16,7 +17,7 @@ e.preventDefault();
 setError("");
 setLoading(true);
 try {
-  const res = await fetch("http://127.0.0.1:5000/api/users/login", {
+  const response = await fetch(`${API_URL}/api/users/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password }),
@@ -25,7 +26,7 @@ try {
   // Safely handle non-JSON or error responses
   let data;
   try {
-    data = await res.json();
+    data = await response.json();
   } catch {
     throw new Error("Invalid server response (not JSON)");
   }

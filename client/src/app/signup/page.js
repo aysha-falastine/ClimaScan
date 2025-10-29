@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { useRouter } from "next/navigation"; //  Correct for Next.js routing
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const SignupPage = () => {
 const [name, setName] = useState("");
@@ -15,7 +16,7 @@ const handleSubmit = async (e) => {
 e.preventDefault();
 setError("");
   try {
-  const response = await fetch("http://127.0.0.1:5000/api/users/signup", {
+  const response = await fetch(`${API_URL}/api/users/signup`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name, email, password }),
