@@ -68,7 +68,7 @@ const propertyAPI = {
         headers['Authorization'] = `Bearer ${token}`;
       }
       
-      const response = await fetch(`${API_URL}/api/api/properties/`, {
+      const response = await fetch(`${API_URL}/properties/`, {
         method: 'GET',
         headers: headers
       });
