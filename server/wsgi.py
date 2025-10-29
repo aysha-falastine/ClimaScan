@@ -48,6 +48,22 @@ if env == 'production':
             else:
                 print(f"✅ Database ready with tables: {', '.join(tables)}")
                 
+                # Check if password_hash column needs resizing
+                try:
+                    from sqlalchemy import Column
+                    columns = inspector.get_columns('users')
+                    password_col = next((c for c in columns if c['name'] == 'password_hash'), None)
+                    if password_col and password_col.get('type').__class__.__name__ == 'VARCHAR':
+                        current_length = password_col['type'].length
+                        if current_length and current_length < 256:
+                            print(f"⚠️  password_hash column is only {current_length} chars, resizing to 256...")
+                            db.session.execute(text("ALTER TABLE users ALTER COLUMN password_hash TYPE VARCHAR(256)"))
+                            db.session.commit()
+                            print("✅ password_hash column resized")
+                except Exception as e:
+                    print(f"Warning: Could not check/resize password_hash column: {e}")
+                    db.session.rollback()
+                
     except Exception as e:
         print(f"❌ Database initialization error: {e}")
         # Don't exit - let the app try to start anyway
