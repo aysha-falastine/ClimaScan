@@ -1,1 +1,1 @@
-web: gunicorn wsgi:app
+web: python -c "from app import create_app; from app.database.db import db; from sqlalchemy import text; app=create_app(); app.app_context().push(); db.session.execute(text('DROP TABLE IF EXISTS alembic_version CASCADE')); db.session.commit(); print('✅ Cleared alembic')" && flask db upgrade && gunicorn wsgi:app
