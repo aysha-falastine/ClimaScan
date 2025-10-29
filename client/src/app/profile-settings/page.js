@@ -72,7 +72,7 @@ export default function ProfileSettingsPage() {
       }
 
       try {
-        const response = await fetch(`${API_URL}/users/me`, {
+        const response = await fetch(`${API_URL}/api/users/me`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -123,7 +123,7 @@ export default function ProfileSettingsPage() {
     const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
     
     try {
-      const response = await fetch(`${API_URL}/users/me`, {
+      const response = await fetch(`${API_URL}/api/users/me`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -155,7 +155,7 @@ export default function ProfileSettingsPage() {
   const confirmDelete = async () => {
     const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
     try {
-      const response = await fetch(`${API_URL}/users/me`, {
+      const response = await fetch(`${API_URL}/api/users/me`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
