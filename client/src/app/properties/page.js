@@ -19,7 +19,7 @@ const getToken = () => localStorage.getItem("token");
 const fetchProperties = async (query = "", pageNum = 1) => {
   setLoading(true);
   try {
-    const res = await fetch(`${API_URL}/api/?search=${query}&page=${pageNum}&per_page=5`, {
+    const res = await fetch(`${API_URL}/?search=${query}&page=${pageNum}&per_page=5`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${getToken()}`,
