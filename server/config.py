@@ -1,10 +1,9 @@
 import os
 from dotenv import load_dotenv
 
-# Load environment variables from .env file
+
 load_dotenv()
 
-# Base directory
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
@@ -17,7 +16,7 @@ class DevelopmentConfig(Config):
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = os.getenv(
         'DATABASE_URL',
-        f"sqlite:///{os.path.join(basedir, 'instance', 'dev.db')}"
+        f"sqlite:///{os.path.join(basedir, 'instance', 'climascan.db')}"
     )
 
 
@@ -25,7 +24,7 @@ class ProductionConfig(Config):
     DEBUG = False
     SQLALCHEMY_DATABASE_URI = os.getenv(
         'DATABASE_URL',
-        f"sqlite:///{os.path.join(basedir, 'instance', 'prod.db')}"
+        f"sqlite:///{os.path.join(basedir, 'instance', 'climascan.db')}"
     )
 
 

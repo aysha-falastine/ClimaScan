@@ -4,9 +4,7 @@ from app.database.db import db
 
 
 class User(db.Model):
-    """User model for authentication and profile management."""
-
-    # Use plural table name 'users' to match FK references across the app
+    
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -14,11 +12,11 @@ class User(db.Model):
     password_hash = db.Column(db.String(128), nullable=False)
     name = db.Column(db.String(255), nullable=True)
 
-    # Optional preferences stored as JSON when supported
+    
     try:
         preferences = db.Column(db.JSON, nullable=True)
     except Exception:
-        # Fallback if DB doesn't have JSON type configured
+        
         preferences = db.Column(db.Text, nullable=True)
 
     default_location = db.Column(db.String(255), nullable=True)

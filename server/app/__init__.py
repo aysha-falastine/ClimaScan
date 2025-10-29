@@ -6,19 +6,18 @@ from config import DevelopmentConfig
 from app.database.db import db
 from app.routes import register_blueprints
 
-# Extension instances
 migrate = Migrate()
 jwt = JWTManager()
 
 def create_app(config_class=DevelopmentConfig):
-    """Application factory function"""
+    
     app = Flask(__name__)
 
-    # Load configuration
+    
     app.config.from_object(config_class)
 
-    # ✅ JWT setup (add this)
-    app.config["JWT_SECRET_KEY"] = "your-secret-key"  # change this to something unique
+    
+    app.config["JWT_SECRET_KEY"] = "your-secret-key"  
     app.config["JWT_TOKEN_LOCATION"] = ["headers"]
     app.config["JWT_HEADER_NAME"] = "Authorization"
     app.config["JWT_HEADER_TYPE"] = "Bearer"
@@ -29,7 +28,7 @@ def create_app(config_class=DevelopmentConfig):
 
     # Allow known dev origins; also add an after_request hook below to echo the
     # incoming Origin header for development to avoid subtle mismatches.
-    allowed_origins = ["http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:3000"]
+    allowed_origins = ["http://localhost:3000", "http://127.0.0.1:3000"]
 
     CORS(app, resources={r"/api/*": {
         "origins": allowed_origins,
@@ -37,6 +36,7 @@ def create_app(config_class=DevelopmentConfig):
         "allow_headers": ["Content-Type", "Authorization"],
         "expose_headers": ["Content-Type", "Authorization"]
     }}, supports_credentials=True)
+    
 
     # Echo the origin header back in responses for matching dev origins and
     # ensure required CORS headers are always present. This helps browsers that

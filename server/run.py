@@ -1,7 +1,7 @@
 from app import create_app
-from config import config  # ✅ CORRECT
+from config import config
 
-app = create_app(config['development'])  # ✅ use the development config class
+app = create_app(config['development'])
 
 @app.route('/')
 def home():

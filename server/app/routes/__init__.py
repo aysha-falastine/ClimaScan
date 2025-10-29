@@ -45,6 +45,6 @@ def register_blueprints(app: Flask):
     # Properties
     try:
         from app.routes.properties import properties_bp
-        app.register_blueprint(properties_bp, url_prefix="/api/properties")
+        app.register_blueprint(properties_bp)
     except ImportError:
         pass
