@@ -1,4 +1,5 @@
-const API_BASE_URL = 'http://127.0.0.1:5000/api';
+const API_URL = "https://climascan.onrender.com";
+;
 
 // Helper function to get auth token
 const getAuthToken = () => {
@@ -60,23 +61,23 @@ export const userAPI = {
       headers: getAuthHeaders()
     });
     
-    console.log('🔍 Response status:', response.status);
+    console.log(' Response status:', response.status);
     
     if (!response.ok) {
       const error = await response.json().catch(() => ({}));
-      console.error('❌ API Error:', error);
+      console.error(' API Error:', error);
       throw new Error(error.message || 'Failed to fetch user profile');
     }
     
     const data = await response.json();
-    console.log('✅ User profile fetched:', data);
+    console.log(' User profile fetched:', data);
     return data;
   },
 
   // Update current user profile
   updateCurrentUser: async (userData) => {
-    console.log('🔍 Updating user profile');
-    console.log('🔍 Data:', userData);
+    console.log(' Updating user profile');
+    console.log(' Data:', userData);
     
     const response = await fetch(`${API_BASE_URL}/users/me`, {
       method: 'PUT',
@@ -84,38 +85,38 @@ export const userAPI = {
       body: JSON.stringify(userData)
     });
     
-    console.log('🔍 Response status:', response.status);
+    console.log(' Response status:', response.status);
     
     if (!response.ok) {
       const error = await response.json().catch(() => ({}));
-      console.error('❌ API Error:', error);
+      console.error(' API Error:', error);
       throw new Error(error.message || 'Failed to update profile');
     }
     
     const data = await response.json();
-    console.log('✅ Profile updated:', data);
+    console.log(' Profile updated:', data);
     return data;
   },
 
   // Delete current user account
   deleteCurrentUser: async () => {
-    console.log('🔍 Deleting user account');
+    console.log(' Deleting user account');
     
     const response = await fetch(`${API_BASE_URL}/users/me`, {
       method: 'DELETE',
       headers: getAuthHeaders()
     });
     
-    console.log('🔍 Response status:', response.status);
+    console.log(' Response status:', response.status);
     
     if (!response.ok) {
       const error = await response.json().catch(() => ({}));
-      console.error('❌ API Error:', error);
+      console.error(' API Error:', error);
       throw new Error(error.message || 'Failed to delete account');
     }
     
     const data = await response.json();
-    console.log('✅ Account deleted:', data);
+    console.log(' Account deleted:', data);
     return data;
   }
 };
