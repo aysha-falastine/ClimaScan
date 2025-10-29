@@ -30,7 +30,7 @@ const aiChatAPI = {
 
 const reportAPI = {
   generateReport: async (propertyId) => {
-    const endpoint = `${API_URL}/reports/property/${propertyId}/generate`;
+    const endpoint = `${API_URL}/api/reports/property/${propertyId}/generate`;
     console.log('🔍 Calling API:', endpoint);
     console.log('🔍 Property ID:', propertyId);
     
