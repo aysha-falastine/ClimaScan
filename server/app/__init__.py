@@ -29,7 +29,7 @@ def create_app(config_class=DevelopmentConfig):
 
     # Allow known dev origins; also add an after_request hook below to echo the
     # incoming Origin header for development to avoid subtle mismatches.
-    allowed_origins = ["http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:3000"]
+    allowed_origins = ["https://clima-scan.vercel.app/", "https://clima-scan.vercel.app/", "http://localhost:3000"]
 
     CORS(app, resources={r"/api/*": {
         "origins": allowed_origins,
