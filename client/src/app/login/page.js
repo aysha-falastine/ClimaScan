@@ -31,7 +31,7 @@ try {
     throw new Error("Invalid server response (not JSON)");
   }
 
-  if (res.ok) {
+  if (response.ok) {
     localStorage.setItem("token", data.access_token);
     if (data.user) {
       localStorage.setItem("user", JSON.stringify(data.user));
