@@ -5,16 +5,9 @@ from app.services.ai_chat_service import get_chat_service
 ai_bp = Blueprint('ai', __name__)
 
 
-@ai_bp.route('/chat', methods=['POST', 'OPTIONS'])
+@ai_bp.route('/chat', methods=['POST'])
 def ai_chat():
     """Handle AI chat messages"""
-    if request.method == 'OPTIONS':
-        response = jsonify({'status': 'ok'})
-        response.headers.add('Access-Control-Allow-Origin', '*')
-        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
-        response.headers.add('Access-Control-Allow-Methods', 'POST, OPTIONS')
-        return response, 200
-
     try:
         data = request.get_json()
         
