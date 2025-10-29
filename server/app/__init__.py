@@ -17,7 +17,7 @@ def create_app(config_class=DevelopmentConfig):
     # Load configuration
     app.config.from_object(config_class)
 
-    # ✅ JWT setup (add this)
+    #  JWT setup (add this)
     app.config["JWT_SECRET_KEY"] = "your-secret-key"  # change this to something unique
     app.config["JWT_TOKEN_LOCATION"] = ["headers"]
     app.config["JWT_HEADER_NAME"] = "Authorization"
@@ -29,7 +29,7 @@ def create_app(config_class=DevelopmentConfig):
 
     # Allow known dev origins; also add an after_request hook below to echo the
     # incoming Origin header for development to avoid subtle mismatches.
-    allowed_origins = ["https://clima-scan.vercel.app/", "http://localhost:3000"]
+    allowed_origins = ["https://clima-scan.vercel.app", "http://localhost:3000","http://127.0.0.1:3000"]
 
     CORS(app, resources={r"/api/*": {
         "origins": allowed_origins,
