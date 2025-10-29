@@ -11,7 +11,7 @@ const Map = dynamic(() => import("@/components/Map"), {
 });
 // Hardcoded for production - change back after presentation
 const BASE_URL = "https://climascan.onrender.com";
-const API_URL = `${BASE_URL}/api/properties`;
+const API_URL = `${BASE_URL}/api/properties/`;
 
 
 // Get JWT token from localStorage (safe access)
@@ -227,7 +227,7 @@ export default function PropertiesPage() {
   const deleteProperty = async (id) => {
     try {
       const { authFetch } = await import("@/lib/fetcher");
-      const res = await authFetch(`${API_URL}/${id}`, {
+      const res = await authFetch(`${API_URL}${id}`, {
         method: "DELETE",
       });
       if (res.status === 401) {
