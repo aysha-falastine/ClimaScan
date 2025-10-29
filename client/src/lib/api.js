@@ -1,10 +1,8 @@
-const API_URL = "https://climascan.onrender.com";
-;
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 // Helper function to get auth token
 const getAuthToken = () => {
   if (typeof window !== 'undefined') {
-    // Use the same key used by the app login flow ('token')
     return localStorage.getItem('token');
   }
   return null;
@@ -16,34 +14,32 @@ const getAuthHeaders = () => {
   const headers = {
     'Content-Type': 'application/json'
   };
-  
+
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
   }
-  
+
   return headers;
 };
 
 // Report API
 export const reportAPI = {
   generateReport: async (propertyId) => {
-    console.log('🔍 Calling API:', `${API_BASE_URL}/reports/generate`);
-    console.log('🔍 Property ID:', propertyId);
-    
-    const response = await fetch(`${API_BASE_URL}/reports/generate`, {
+    console.log('🔍 Calling API:', `${API_URL}/api/reports/generate/${propertyId}`);
+
+    const response = await fetch(`${API_URL}/api/reports/generate/${propertyId}`, {
       method: 'POST',
-      headers: getAuthHeaders(),
-      body: JSON.stringify({ property_id: propertyId })
+      headers: getAuthHeaders()
     });
-    
+
     console.log('🔍 Response status:', response.status);
-    
+
     if (!response.ok) {
       const error = await response.json();
       console.error('❌ API Error:', error);
       throw new Error(error.error || 'Failed to generate report');
     }
-    
+
     const data = await response.json();
     console.log('✅ API Response:', data);
     return data;
@@ -52,71 +48,46 @@ export const reportAPI = {
 
 // User API
 export const userAPI = {
-  // Get current user profile
   getCurrentUser: async () => {
-    console.log('🔍 Fetching current user profile');
-    
-    const response = await fetch(`${API_BASE_URL}/users/me`, {
+    const response = await fetch(`${API_URL}/api/users/me`, {
       method: 'GET',
       headers: getAuthHeaders()
     });
-    
-    console.log(' Response status:', response.status);
-    
+
     if (!response.ok) {
       const error = await response.json().catch(() => ({}));
-      console.error(' API Error:', error);
       throw new Error(error.message || 'Failed to fetch user profile');
     }
-    
-    const data = await response.json();
-    console.log(' User profile fetched:', data);
-    return data;
+
+    return response.json();
   },
 
-  // Update current user profile
   updateCurrentUser: async (userData) => {
-    console.log(' Updating user profile');
-    console.log(' Data:', userData);
-    
-    const response = await fetch(`${API_BASE_URL}/users/me`, {
+    const response = await fetch(`${API_URL}/api/users/me`, {
       method: 'PUT',
       headers: getAuthHeaders(),
       body: JSON.stringify(userData)
     });
-    
-    console.log(' Response status:', response.status);
-    
+
     if (!response.ok) {
       const error = await response.json().catch(() => ({}));
-      console.error(' API Error:', error);
       throw new Error(error.message || 'Failed to update profile');
     }
-    
-    const data = await response.json();
-    console.log(' Profile updated:', data);
-    return data;
+
+    return response.json();
   },
 
-  // Delete current user account
   deleteCurrentUser: async () => {
-    console.log(' Deleting user account');
-    
-    const response = await fetch(`${API_BASE_URL}/users/me`, {
+    const response = await fetch(`${API_URL}/api/users/me`, {
       method: 'DELETE',
       headers: getAuthHeaders()
     });
-    
-    console.log(' Response status:', response.status);
-    
+
     if (!response.ok) {
       const error = await response.json().catch(() => ({}));
-      console.error(' API Error:', error);
       throw new Error(error.message || 'Failed to delete account');
     }
-    
-    const data = await response.json();
-    console.log(' Account deleted:', data);
-    return data;
+
+    return response.json();
   }
 };
