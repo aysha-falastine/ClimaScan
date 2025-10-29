@@ -335,7 +335,7 @@ Frontend Deployment (Vercel)
 3.	Build Command: npm run build
 4.	Environment Variables: Add from .env.local
 5.	Deploy: Automatic on push to main
-Live Frontend: https://your-app.vercel.app
+Live Frontend: https://clima-scan.vercel.app/
 Docker Deployment (Optional)
 bash
 #### Backend
