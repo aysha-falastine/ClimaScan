@@ -9,7 +9,8 @@ const Map = dynamic(() => import("@/components/Map"), {
   ssr: false,
   loading: () => <div className="h-full w-full bg-gray-100 flex items-center justify-center text-gray-500">Loading map...</div>
 });
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:5000";
+const API_URL = `${BASE_URL}/api/properties`;
 
 
 // Get JWT token from localStorage (safe access)
