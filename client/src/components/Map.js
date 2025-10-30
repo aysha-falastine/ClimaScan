@@ -10,7 +10,7 @@ export default function Map() {
 
   useEffect(() => {
     setIsClient(true);
-    // Force remount if needed
+    
     setMapKey(prev => prev + 1);
   }, []);
 
