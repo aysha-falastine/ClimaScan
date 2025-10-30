@@ -24,14 +24,13 @@ export default function ReportsPage() {
   const [message, setMessage] = useState("");
   const [aiSource, setAiSource] = useState(null);
 
-  // Get JWT token from localStorage (or your storage method).
-  // Login flow stores the token under the key 'token', but some places may use 'access_token'.
+  
   const token =
     typeof window !== "undefined"
       ? localStorage.getItem("token") || localStorage.getItem("access_token")
       : null;
 
-  // Fetch all properties for the user
+  
   useEffect(() => {
     const fetchAllProperties = async () => {
       let allProps = [];
@@ -64,7 +63,7 @@ export default function ReportsPage() {
     if (token) fetchAllProperties();
   }, [token]);
 
-  // Fetch report for selected property
+  
   const fetchReport = async (propertyId) => {
     if (!propertyId || !token) return;
     setLoadingReport(true);
@@ -103,10 +102,10 @@ export default function ReportsPage() {
   const data = await res.json();
   setReportData(data.report);
   setAiSource(data.report.ai_source || null);
-      setMessage("✅ Re-analysis complete!");
+      setMessage("Re-analysis complete!");
     } catch (error) {
       console.error(error);
-      setMessage("❌ Failed to re-analyze report");
+      setMessage("Failed to re-analyze report");
     } finally {
       setLoading(false);
     }
@@ -124,10 +123,10 @@ export default function ReportsPage() {
       const data = await res.json();
       setReportData(data.report);
       setAiSource(data.report.ai_source || null);
-      setMessage("✅ Report generated");
+      setMessage("Report generated");
     } catch (error) {
       console.error(error);
-      setMessage("❌ Failed to generate report");
+      setMessage("Failed to generate report");
     } finally {
       setLoading(false);
     }
@@ -148,10 +147,10 @@ export default function ReportsPage() {
       document.body.appendChild(link);
       link.click();
       link.remove();
-      setMessage(`📄 Report exported`);
+      setMessage(`Report exported`);
     } catch (error) {
       console.error(error);
-      setMessage("❌ Failed to export report");
+      setMessage("Failed to export report");
     }
   };
 
