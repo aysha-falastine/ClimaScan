@@ -62,7 +62,6 @@ export default function ProfileSettingsPage() {
   const [hasChanges, setHasChanges] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // Fetch user profile data on mount
   useEffect(() => {
     const fetchProfile = async () => {
       const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
