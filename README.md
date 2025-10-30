@@ -109,9 +109,8 @@ flask db upgrade
 bash
 flask run
 # Server runs on http://localhost:5000
-7.	Access API documentation
-http://localhost:5000/api/docs
-________________________________________
+
+______________________________________
 #### Frontend Setup
 1.	Navigate to frontend directory
 bash
