@@ -327,7 +327,7 @@ o	Environment: Python 3.9
 3.	Add Environment Variables from .env
 4.	Create PostgreSQL database in Render
 5.	Run migrations: flask db upgrade
-Live Backend: https://your-app.onrender.com
+Live Backend: "https://climascan.onrender.com";
 ### Frontend Deployment (Vercel)
 1.	Connect GitHub repo to Vercel
 2.	Framework Preset: Next.js
