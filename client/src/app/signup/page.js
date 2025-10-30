@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { FaEnvelope, FaLock } from "react-icons/fa";
-import { useRouter } from "next/navigation"; //  Correct for Next.js routing
+import { useRouter } from "next/navigation";
 const API_URL = "https://climascan.onrender.com";
 
 const SignupPage = () => {
@@ -22,13 +22,13 @@ setError("");
     body: JSON.stringify({ name, email, password }),
   });
 
-  //  Safely parse backend response
+  
   const text = await response.text();
   let data;
   try {
     data = JSON.parse(text);
   } catch {
-    console.error("❌ Server did not return JSON:", text);
+    console.error("Server did not return JSON:", text);
     setError("Server error — backend did not return valid JSON.");
     return;
   }
