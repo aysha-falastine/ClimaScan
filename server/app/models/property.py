@@ -11,9 +11,6 @@ class Property(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
-    # Optional: assign properties to users
-    # Note: the users table in this app is named 'user' (singular) so the FK should
-    # reference 'user.id'. Keep consistent with `User.__tablename__`.
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
 
     # Relationship to reports
