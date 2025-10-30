@@ -6,9 +6,9 @@ export default function LandingPage() {
     <>
       <NavBar />
 
-      {/* Hero Section with Background Image + Overlay */}
+      
       <section className="relative text-white py-28 px-6 overflow-hidden">
-  {/* Background image as <img> */}
+  
   <img
     src="/climabg.jpg"
     alt="Climate background"
@@ -49,10 +49,10 @@ export default function LandingPage() {
         <img
           src={image}
           alt={title}
-          className="w-full h-56 object-contain bg-white p-4" //  increased from h-48 to h-56
+          className="w-full h-56 object-contain bg-white p-4"
         />
         <div className="p-4">
-          <h3 className="text-xl font-semibold text-green-700 text-center"> {/*  changed to green */}
+          <h3 className="text-xl font-semibold text-green-700 text-center"> 
             {title}
           </h3>
         </div>
