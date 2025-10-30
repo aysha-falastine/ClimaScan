@@ -9,8 +9,8 @@ properties_bp = Blueprint("properties", __name__)
 @properties_bp.route("/", methods=["GET"])
 @jwt_required()
 def get_properties():
-    # 🔍 Debugging line: check incoming headers
-    print("🔍 Incoming headers:", dict(request.headers))
+    
+    print("Incoming headers:", dict(request.headers))
 
     user_id = int(get_jwt_identity())
     search = request.args.get("search", "").strip()
