@@ -15,14 +15,14 @@ def create_app(config_class=DevelopmentConfig):
     app = Flask(__name__)
     app.config.from_object(config_class)
 
-    # ✅ JWT setup
+    # JWT setup
     app.config["JWT_SECRET_KEY"] = app.config["SECRET_KEY"]
     app.config["JWT_TOKEN_LOCATION"] = ["headers"]
     app.config["JWT_HEADER_NAME"] = "Authorization"
     app.config["JWT_HEADER_TYPE"] = "Bearer"
     app.config["JWT_IDENTITY_CLAIM"] = "identity"
 
-    # ✅ CORS setup using config-defined origins
+    # CORS setup using config-defined origins
     allowed_origins = app.config["CORS_ORIGINS"]
     CORS(app, resources={r"/api/*": {
         "origins": allowed_origins,
@@ -31,7 +31,7 @@ def create_app(config_class=DevelopmentConfig):
         "expose_headers": ["Content-Type", "Authorization"]
     }}, supports_credentials=True)
 
-    # ✅ Optional: echo origin for strict dev environments
+    
     @app.after_request
     def add_cors_headers(response):
         origin = request.headers.get("Origin")
@@ -43,15 +43,15 @@ def create_app(config_class=DevelopmentConfig):
         response.headers.setdefault("Access-Control-Allow-Credentials", "true")
         return response
 
-    # ✅ Initialize extensions
+    # Initialize extensions
     db.init_app(app)
     migrate.init_app(app, db)
     jwt.init_app(app)
 
-    # ✅ Register all blueprints
+    #  Register all blueprints
     register_blueprints(app)
 
-    # ✅ Error handling (dev only)
+    #  Error handling (dev only)
     if app.debug:
         from werkzeug.exceptions import HTTPException
 
@@ -63,7 +63,7 @@ def create_app(config_class=DevelopmentConfig):
             traceback.print_exc()
             return jsonify({"error": "Internal Server Error"}), 500
 
-    # ✅ Health check route
+    # Health check route
     @app.route('/')
     def index():
         return {'message': 'ClimaScan API is running'}
