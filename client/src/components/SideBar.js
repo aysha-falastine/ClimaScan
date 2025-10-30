@@ -8,8 +8,8 @@ export default function SidebarLayout({ children }) {
   const router = useRouter();
 
   const handleLogout = () => {
-    // Clear auth token or cookie if any
-    localStorage.removeItem("token"); // example
+
+    localStorage.removeItem("token");
     router.push("/login");
   };
 
