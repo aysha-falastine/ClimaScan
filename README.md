@@ -334,17 +334,8 @@ Live Backend: https://your-app.onrender.com
 3.	Build Command: npm run build
 4.	Environment Variables: Add from .env.local
 5.	Deploy: Automatic on push to main
-Live Frontend: https://your-app.vercel.app
-Docker Deployment (Optional)
-bash
-# Backend
-docker build -t climate-risk-backend ./backend
-docker run -p 5000:5000 climate-risk-backend
+Live Frontend: https://clima-scan.vercel.app/
 
-# Frontend
-docker build -t climate-risk-frontend ./frontend
-docker run -p 3000:3000 climate-risk-frontend
-________________________________________
 ## 📁 Project Structure
 ```
 ai-climate-risk-detector/
