@@ -1,6 +1,6 @@
 import random
 def generate_report_data(property_obj):
-    # Mock AI or sensor-based climate risk calculation
+    
     return {
         "flood_score": random.randint(40, 90),
         "heat_score": random.randint(50, 85),
