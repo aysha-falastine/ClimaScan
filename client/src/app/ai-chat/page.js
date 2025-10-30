@@ -5,11 +5,11 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { LayoutDashboard, Home, FileText, MessageSquare, LogOut, User, Send, Download, MapPin, CheckCircle, AlertCircle } from 'lucide-react';
 
-// API Configuration
+
 const API_URL = "https://climascan.onrender.com";
 
 
-// API Service Functions
+
 const aiChatAPI = {
   sendMessage: async (message, history) => {
     const response = await fetch(`${API_URL}/api/ai/chat`, {
@@ -49,12 +49,12 @@ const reportAPI = {
     
     if (!response.ok) {
       const error = await response.json();
-      console.error('❌ API Error:', error);
+      console.error('API Error:', error);
       throw new Error(error.error || 'Failed to generate report');
     }
     
     const data = await response.json();
-    console.log('✅ API Response:', data);
+    console.log('API Response:', data);
     return data;
   }
 };
@@ -81,7 +81,7 @@ const propertyAPI = {
       return data.properties || [];
     } catch (error) {
       console.error('Property fetch error:', error);
-      // Return mock data if API fails
+  
       return [
         { id: 1, name: 'Kilimani Heights, Nairobi', address: 'Kilimani, Nairobi' },
         { id: 2, name: 'Westlands Tower', address: 'Westlands, Nairobi' }
@@ -90,7 +90,7 @@ const propertyAPI = {
   }
 };
 
-// Utility function for chat export
+
 const generateChatReport = (messages) => {
   const chatContent = messages.map(msg => 
     `${msg.isUser ? 'You' : 'ClimaScan AI'} (${new Date(msg.timestamp).toLocaleString()}):\n${msg.text}\n`
@@ -105,7 +105,7 @@ const generateChatReport = (messages) => {
   URL.revokeObjectURL(url);
 };
 
-// ChatMessage Component
+
 const ChatMessage = ({ message, onViewReport, selectedProperty }) => {
   const {
     text,
@@ -286,7 +286,7 @@ const NavIcon = ({ href, icon: Icon, label, active }) => (
   </a>
 );
 
-// Main AI Chat Page
+
 export default function AIChatPage() {
   const router = useRouter();
   const [messages, setMessages] = useState([]);
